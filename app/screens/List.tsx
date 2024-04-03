@@ -1,7 +1,7 @@
 import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIRESTORE_DB } from '../../firebaseConfig';
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -32,18 +32,20 @@ const List = ({ navigation }: any) => {
     }, []);
 
     const addTodo = async () => {
-        const doc = addDoc(collection(FIRESTORE_DB, "todos"), {title: todo, done: false}); 
+        const doc = addDoc(collection(FIRESTORE_DB, 'todos'), {title: todo, done: false}); 
         setTodo('')
     }
 
     const renderTodo = ({item}: any) => {
 
+        const ref = doc(FIRESTORE_DB, `todos/${item.id}`);
+
 
         const toggleDone = async () => {
-
+            updateDoc(ref, {done: !item.done});
         }
         const deleteItem = async () => {
-
+            deleteDoc(ref);
         }
         return (
             <View style={styles.todoContainer}>
@@ -93,8 +95,8 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         marginRight:10,
-        height: 40,
         borderWidth: 1,
+        height: 50,
         padding: 10,
         borderRadius: 10,
         backgroundColor: 'white',
@@ -102,9 +104,9 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 100,
+        padding: 10,
+        height: 50,
+        borderRadius: 10,
         backgroundColor: 'white',
         borderColor: 'blue',
         borderWidth: 1,
@@ -115,14 +117,21 @@ const styles = StyleSheet.create({
     },
     todoContainer:{
         flexDirection: 'row',
+        backgroundColor: '#fffff',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 10,
+        height: 50,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 50,
     },
     todoText:{
         flex: 1,
+        paddingHorizontal: 5,
     },
     todo:{
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
     },
