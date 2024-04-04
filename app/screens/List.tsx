@@ -1,9 +1,10 @@
 import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FIRESTORE_DB } from '../../firebaseConfig';
+import { FIRESTORE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
-
+import { NavigationProp } from '@react-navigation/native';
+import Login from './Login';
 
 export interface Todo{
     title: string;
@@ -11,11 +12,16 @@ export interface Todo{
     id: string;
 }
 
-const List = ({ navigation }: any) => {
+interface RouterProps {
+    navigation: NavigationProp<any, any>;
+}
+
+const List = ({ navigation }: RouterProps) => {
 
     const [todos, setTodos] = useState<Todo[]>([]);
     const [todo, setTodo] = useState('');
 
+    
     useEffect(() => {
         const todoRef = collection(FIRESTORE_DB, "todos");
 
@@ -71,6 +77,9 @@ const List = ({ navigation }: any) => {
             keyExtractor={(todo: Todo) => todo.id}
             renderItem={renderTodo}
         />
+        <Pressable style={styles.button} onPress={()=>FIRESTORE_AUTH.signOut()}>
+                <Text style={styles.text}>SignOut</Text>
+        </Pressable>
     </View>
   )
 }

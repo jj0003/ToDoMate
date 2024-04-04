@@ -1,10 +1,8 @@
-import { View, Text, Image, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import React, {  useState } from 'react'
+import { NavigationProp } from '@react-navigation/native';
 import { FIRESTORE_AUTH } from '../../firebaseConfig';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { Ionicons } from '@expo/vector-icons';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 interface RouterProps {
@@ -12,52 +10,49 @@ interface RouterProps {
 }
 
 
-const Login = ({navigation}: RouterProps) => {
+const SignUp = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const auth = FIRESTORE_AUTH;
 
-    const signIn = async () => {
+    const signUp = async () => {
         setLoading(true);
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            await createUserWithEmailAndPassword(auth, email, password);
         } catch (error: any) {
-            alert("Error signing in: " + error.message);
+            alert("Error signing up: " + error.message);
         }
         finally {
             setLoading(false);
-        }
+        }   
     }
+
   return (
     <View>
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')}/>
-            <Text style={styles.textHeading}>Welcome back.</Text>
+            <Text style={styles.textHeading}>Welcome.</Text>
             <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
             <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
-
-            <Pressable style={styles.textForgotPassword}>
-                    <Text style={styles.textForgotPassword}>Forgot your password?</Text>
-            </Pressable>
             {loading ? <ActivityIndicator size='large' color='blue'/> : 
             (
                 <>
-                    <Pressable style={styles.buttonSignIn} onPress={signIn}>
-                        <Text style={styles.text}>Log In</Text>
+                    <Pressable style={styles.buttonSignIn} onPress={signUp}>
+                        <Text style={styles.text}>Sign Up</Text>
                     </Pressable>
                 </>
             )
             }
             <Text>
-                Don't have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('SignUp')}>Sign up</Text>
+                Already have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
             </Text>
         </KeyboardAvoidingView>
     </View>
   )
 }
 
-export default Login
+export default SignUp
 
 
 const styles = StyleSheet.create({
