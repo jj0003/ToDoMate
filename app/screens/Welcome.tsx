@@ -1,7 +1,8 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, Linking } from 'react-native'
 import React from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIRESTORE_AUTH } from '../../firebaseConfig';
+
 
 
 
@@ -28,7 +29,7 @@ const Welcome = ({navigation}:RouterProps) => {
                 <Text style={styles.textSignUp}>Sign Up</Text>
             </Pressable>
             <Text>
-                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => navigation.navigate('Details')}>here</Text>.
+                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://www.todo-mate.org')}>here</Text>.
             </Text>
         </View>
     )

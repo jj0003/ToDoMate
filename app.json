@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "todoapp",
-    "slug": "todoapp",
+    "slug": "todomate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8581267c-6981-4e91-b513-b4710210a477"
+      }
+    },
+    "owner": "janfurio"
   }
 }

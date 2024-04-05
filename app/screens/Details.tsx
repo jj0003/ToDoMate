@@ -102,21 +102,11 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'red',
+        backgroundColor: 'blue',
         borderColor: 'white',
         borderWidth: 1,
     },
-    buttonSignUp:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        height: 50,
-        width: '100%',
-        borderRadius: 10,
-        backgroundColor: 'white',
-        borderColor: 'blue',
-        borderWidth: 1,
-    },
+
     text: {
         color: 'white',
         fontWeight: 'bold',
