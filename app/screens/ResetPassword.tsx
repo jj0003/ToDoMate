@@ -1,17 +1,18 @@
-import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
-import React, { useState } from 'react'
-import { NavigationProp } from '@react-navigation/native';
+import { View, Text, Image, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { FIRESTORE_AUTH } from '../../firebaseConfig';
-import { User, sendPasswordResetEmail } from 'firebase/auth';
-
+import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { Ionicons } from '@expo/vector-icons';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 
 
 interface RouterProps {
     navigation: NavigationProp<any, any>;
 }
 
-const Details = ({navigation}:RouterProps) => {
 
+const ResetPassword = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const auth = FIRESTORE_AUTH;
@@ -21,7 +22,7 @@ const Details = ({navigation}:RouterProps) => {
         try {
             await sendPasswordResetEmail(auth, email);
             console.log("Password reset email sent successfully.");
-            alert("Password reset email sent successfully.");
+            alert("Password reset email sent successfully. Please check your inbox.");
         } catch (error: any) {
             alert("Error, couldn't send the reset link to your email: " + error.message);
         }
@@ -29,30 +30,13 @@ const Details = ({navigation}:RouterProps) => {
             setLoading(false);
         }
     }
-
-    const signOut = async () => {
-        setLoading(true);
-        try {
-            await FIRESTORE_AUTH.signOut();
-        } catch (error: any) {
-            alert("Error signing out: " + error.message);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
   return (
-    
-        <View style={styles.container}>
-            <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')}/>
-            <Text style={styles.textHeading}>ToDoMate</Text>
-            <Text>
-                Add ToDo's and share them with your friends.
-            </Text>        
-            <Pressable style={styles.buttonSignOut} onPress={signOut}>
-                <Text style={styles.text}>Sign Out</Text>
-            </Pressable>
+    <View>
+        <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <Text style={styles.textHeading}>Having Trouble??</Text>
+            <Text>Please enter your email to reset your password.</Text>
+
+
             <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
             {loading ? <ActivityIndicator size='large' color='blue'/> : 
             (
@@ -63,23 +47,27 @@ const Details = ({navigation}:RouterProps) => {
                 </>
             )
             }
-            <Text>
-                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => navigation.navigate('Details')}>here</Text>.
-            </Text>
-            
-        </View>
-    )
-
+        </KeyboardAvoidingView>
+    </View>
+  )
 }
-export default Details
+
+export default ResetPassword
 
 
 const styles = StyleSheet.create({
     container: {
+        justifyContent: 'center',
         width: '100%',
         height: '100%',
         gap: 20,
         padding: 20,
+        alignItems: 'center',
+    },
+    containerAvoid: {
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
     },
 
@@ -104,17 +92,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'red',
         borderColor: 'white',
-        borderWidth: 1,
-    },
-    buttonSignUp:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        height: 50,
-        width: '100%',
-        borderRadius: 10,
-        backgroundColor: 'white',
-        borderColor: 'blue',
         borderWidth: 1,
     },
     text: {

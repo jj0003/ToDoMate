@@ -46,7 +46,6 @@ const List = ({ navigation }: RouterProps) => {
 
         const ref = doc(FIRESTORE_DB, `todos/${item.id}`);
 
-
         const toggleDone = async () => {
             updateDoc(ref, {done: !item.done});
         }
@@ -65,6 +64,7 @@ const List = ({ navigation }: RouterProps) => {
         )
     }
     return (
+
     <View style={styles.container}>
         <View style={styles.form}>
             <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
@@ -77,14 +77,10 @@ const List = ({ navigation }: RouterProps) => {
             keyExtractor={(todo: Todo) => todo.id}
             renderItem={renderTodo}
         />
-        <Pressable style={styles.button} onPress={()=>FIRESTORE_AUTH.signOut()}>
-                <Text style={styles.text}>SignOut</Text>
-        </Pressable>
     </View>
+
   )
 }
-
-
 
 export default List
 
@@ -95,11 +91,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         padding: 20,
+        height: '90%',
     },
     form: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 20,
     },
     input: {
         flex: 1,

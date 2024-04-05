@@ -37,9 +37,8 @@ const Login = ({navigation}: RouterProps) => {
             <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
             <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
 
-            <Pressable style={styles.textForgotPassword}>
-                    <Text style={styles.textForgotPassword}>Forgot your password?</Text>
-            </Pressable>
+            <Text style={styles.textForgotPassword} onPress={() => navigation.navigate('ResetPassword')}>Forgot your password?</Text>
+            
             {loading ? <ActivityIndicator size='large' color='blue'/> : 
             (
                 <>
