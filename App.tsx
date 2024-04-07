@@ -30,13 +30,13 @@ function InsideStackScreen({ navigation }: RouterProps) {
         options={{
           headerTitle: 'ToDo\'s',
           headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate('About')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Ionicons name="settings" size={24} color="black" />
             </TouchableOpacity>
           ),
         }}
       />
-      <InsideStack.Screen name="About" component={Details} />
+      <InsideStack.Screen name="Settings" component={Details} />
     </InsideStack.Navigator>
   );
 }

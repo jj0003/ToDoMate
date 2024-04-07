@@ -15,6 +15,7 @@ interface RouterProps {
 const ResetPassword = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
+    const [emailSent, setEmailSent] = useState(false); 
     const auth = FIRESTORE_AUTH;
 
     const resetPassword = async () => {
@@ -22,7 +23,7 @@ const ResetPassword = ({navigation}: RouterProps) => {
         try {
             await sendPasswordResetEmail(auth, email);
             console.log("Password reset email sent successfully.");
-            alert("Password reset email sent successfully. Please check your inbox.");
+            setEmailSent(true);
         } catch (error: any) {
             alert("Error, couldn't send the reset link to your email: " + error.message);
         }
@@ -33,20 +34,32 @@ const ResetPassword = ({navigation}: RouterProps) => {
   return (
     <View>
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <Text style={styles.textHeading}>Having Trouble??</Text>
-            <Text>Please enter your email to reset your password.</Text>
-
-
-            <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
-            {loading ? <ActivityIndicator size='large' color='blue'/> : 
-            (
+        {!emailSent ? (
                 <>
-                    <Pressable style={styles.buttonSignOut} onPress={resetPassword}>
-                        <Text style={styles.text}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
-                    </Pressable>
+                    <Text style={styles.textHeading}>Having Trouble??</Text>
+                    <Text>Please enter your email to reset your password.</Text>
+                    <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
+                    {loading ? <ActivityIndicator size='large' color='blue'/> : 
+                    (
+                        <Pressable style={styles.buttonSignOut} onPress={resetPassword}>
+                            <Text style={styles.text}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
+                        </Pressable>
+                    )}
+                    <Text>
+                        Remembered your password? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
+                    </Text>
                 </>
-            )
-            }
+            ) : (
+                <>
+                    <Text style={styles.textHeading}>Check Your Inbox!</Text>
+                    <Text style={{color: 'green'}}>Email sent successfully. Please check your inbox.</Text>
+                    <Text>
+                        Didn't recieve an email? <Text style={styles.textSignUp} onPress={() => setEmailSent(false)}>Try again!</Text>
+                    </Text>
+                </>
+            )}
+
+           
         </KeyboardAvoidingView>
     </View>
   )
@@ -90,7 +103,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'red',
+        backgroundColor: 'blue',
         borderColor: 'white',
         borderWidth: 1,
     },

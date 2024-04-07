@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIRESTORE_AUTH } from '../../firebaseConfig';
@@ -64,7 +64,7 @@ const Details = ({navigation}:RouterProps) => {
             )
             }
             <Text>
-                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => navigation.navigate('Details')}>here</Text>.
+                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://budget-mate.org/todomate.html')}>here</Text>.
             </Text>
             
         </View>

@@ -29,7 +29,7 @@ const Welcome = ({navigation}:RouterProps) => {
                 <Text style={styles.textSignUp}>Sign Up</Text>
             </Pressable>
             <Text>
-                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://www.todo-mate.org')}>here</Text>.
+                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://budget-mate.org/todomate.html')}>here</Text>.
             </Text>
         </View>
     )

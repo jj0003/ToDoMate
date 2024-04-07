@@ -1,10 +1,11 @@
 import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIRESTORE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import Login from './Login';
+import { getAuth } from 'firebase/auth';
 
 export interface Todo{
     title: string;
@@ -20,27 +21,45 @@ const List = ({ navigation }: RouterProps) => {
 
     const [todos, setTodos] = useState<Todo[]>([]);
     const [todo, setTodo] = useState('');
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getFirestore();
 
     
     useEffect(() => {
-        const todoRef = collection(FIRESTORE_DB, "todos");
-
-        const subscriber = onSnapshot(todoRef, {
-            next: (snapshot) => {
-                const todos: Todo[] = [];
-                snapshot.forEach((doc) => {
-                    todos.push({ id: doc.id, ...doc.data() } as Todo);
-                });
-                setTodos(todos);
-            }
+        const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
+          if (user) {
+            const q = query(collection(FIRESTORE_DB, "todos"), where("userID", "==", user.uid));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+              const fetchedTodos = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+              })) as Todo[];
+              setTodos(fetchedTodos);
+            });
+            return () => unsubscribe(); // Unsubscribe from Firestore when the user logs out
+          }
         });
-        return () => subscriber();
-    }, []);
+      
+        return () => unsubscribeAuth(); // Cleanup auth listener when component unmounts
+      }, []);
+      
 
     const addTodo = async () => {
-        const doc = addDoc(collection(FIRESTORE_DB, 'todos'), {title: todo, done: false}); 
-        setTodo('')
+        if (!todo.trim()) return;
+    
+        try {
+            await addDoc(collection(FIRESTORE_DB, 'todos'), {
+                title: todo,
+                done: false,
+                userID: user?.uid
+            }); 
+            setTodo('');
+        } catch (error) {
+            console.error("Failed to add todo:", error);
+        }
     }
+    
 
     const renderTodo = ({item}: any) => {
 
