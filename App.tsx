@@ -1,21 +1,22 @@
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import { Button, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import List from './app/screens/List';
 import Login from './app/screens/Login'; 
 import Details from './app/screens/Details';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { FIRESTORE_AUTH } from './firebaseConfig';
 import Welcome from './app/screens/Welcome';
 import SignUp from './app/screens/SignUp';
 import ResetPassword from './app/screens/ResetPassword';
 
+
 const Stack = createNativeStackNavigator();
 
 const InsideStack = createNativeStackNavigator();
+
+const auth = getAuth();
 
 interface RouterProps {
   navigation: NavigationProp<any, any>;
@@ -46,10 +47,12 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(FIRESTORE_AUTH, (user) => {
-      console.log('user', user);
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log('User state change detected from the Listener:', currentUser);
+      setUser(currentUser);
     });
+
+    return () => unsubscribe();
   }, []);
   return (
     <NavigationContainer>
@@ -74,19 +77,5 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text:{
-    color: 'blue',
-    fontWeight: 'bold',
-    padding: 10,
-  },
-
-});
 
 
