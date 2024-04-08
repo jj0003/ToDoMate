@@ -30,7 +30,6 @@ To begin using ToDoMate, follow these steps:
    ```bash
    expo start
 
-
 ## Usage
 
 - **Add a Task**: Tap the '+' button to introduce a new task.
