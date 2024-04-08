@@ -1,3 +1,7 @@
+<img src="https://github.com/jj0003/ToDoMate/blob/master/assets/ToDo%20-%20Mate_Logo.png" width="100" height="100" alt="ToDoMate Logo" title="ToDoMate Logo">
+
+
+
 # ToDoMate
 
 ## Introduction
