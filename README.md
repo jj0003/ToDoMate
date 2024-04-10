@@ -78,7 +78,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgments
 
-- Thanks to everyone who has contributed to the success and improvement of ToDoMate. Your feedback and contributions have been invaluable.
+- Thanks to everyone who has contributed to the success and improvement of ToDoMate.
 - Special thanks to the Firebase team for providing a robust platform for backend services.
 - Kudos to the React Native community for the continuous support and resources.
 
