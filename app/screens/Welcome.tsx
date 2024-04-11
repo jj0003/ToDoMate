@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, Pressable, Linking } from 'react-native'
 import React from 'react'
 import { NavigationProp } from '@react-navigation/native';
-import { FIRESTORE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 
 
 
@@ -12,7 +12,7 @@ interface RouterProps {
 
 const Welcome = ({navigation}:RouterProps) => {
 
-    const auth = FIRESTORE_AUTH;
+    const auth = FIREBASE_AUTH;
 
   return (
     

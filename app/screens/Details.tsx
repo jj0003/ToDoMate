@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
-import { FIRESTORE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { User, sendPasswordResetEmail } from 'firebase/auth';
 
 
@@ -14,7 +14,7 @@ const Details = ({navigation}:RouterProps) => {
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIRESTORE_AUTH;
+    const auth = FIREBASE_AUTH;
 
     const resetPassword = async () => {
         setLoading(true);
@@ -33,7 +33,7 @@ const Details = ({navigation}:RouterProps) => {
     const signOut = async () => {
         setLoading(true);
         try {
-            await FIRESTORE_AUTH.signOut();
+            await FIREBASE_AUTH.signOut();
         } catch (error: any) {
             alert("Error signing out: " + error.message);
         }

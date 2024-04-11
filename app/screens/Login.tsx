@@ -1,9 +1,7 @@
 import { View, Text, Image, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { FIRESTORE_AUTH } from '../../firebaseConfig';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { Ionicons } from '@expo/vector-icons';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 
@@ -16,14 +14,15 @@ const Login = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIRESTORE_AUTH;
 
     const signIn = async () => {
         setLoading(true);
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-        } catch (error: any) {
+            const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            console.log(response);
+        } catch (error : any) {
             alert("Error signing in: " + error.message);
+            console.log(error);
         }
         finally {
             setLoading(false);

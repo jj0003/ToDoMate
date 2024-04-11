@@ -1,7 +1,7 @@
 import { View, Text, Image, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { FIRESTORE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
@@ -16,7 +16,7 @@ const ResetPassword = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [emailSent, setEmailSent] = useState(false); 
-    const auth = FIRESTORE_AUTH;
+    const auth = FIREBASE_AUTH;
 
     const resetPassword = async () => {
         setLoading(true);

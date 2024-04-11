@@ -1,6 +1,6 @@
 import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FIRESTORE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';

@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import React, {  useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
-import { FIRESTORE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
@@ -14,14 +14,15 @@ const SignUp = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIRESTORE_AUTH;
 
     const signUp = async () => {
         setLoading(true);
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            console.log(response);
         } catch (error: any) {
             alert("Error signing up: " + error.message);
+            console.log(error);
         }
         finally {
             setLoading(false);
