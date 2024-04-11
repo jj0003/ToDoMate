@@ -6,6 +6,9 @@
 
 ## Introduction
 
+[Visit ToDoMate](https://budget-mate.org/todomate.html)
+
+
 **ToDoMate** is your dynamic, user-friendly to-do list application designed to simplify your daily task management. Developed with React Native and enhanced with Expo, it offers a seamless cross-platform experience, specifically optimized for Android devices. Leveraging the power of Firebase for robust backend services and secure user authentication, ToDoMate ensures your task management process is both secure and reliable. Aimed at productivity and simplicity, ToDoMate stands as your efficient solution for organizing daily tasks.
 
 ## Features
@@ -13,6 +16,17 @@
 - **Task Management**: Add, edit, and effortlessly organize your tasks using ToDoMate's intuitive interface. Manage your daily to-dos with ease.
 - **Firebase Integration**: At its heart, ToDoMate uses Firebase for scalable and robust data management, alongside Firebase Auth to ensure a secure and reliable user authentication process.
 - **Minimalist Design**: The ToDoMate UI is minimalist and designed with clarity and usability in mind, offering a distraction-free environment for your task management.
+
+<p float="left">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Check%20Your%20Emails%20Screen%20Light.jpg?raw=true" width="100" alt="Check Your Emails Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Log%20In%20Screen%20Light.jpg?raw=true" width="100" alt="Log In Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Reset%20Your%20Password%20Screen%20Light.jpg?raw=true" width="100" alt="Reset Your Password Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Settings%20Screen%20Light.jpg?raw=true" width="100" alt="Settings Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Sign%20Up%20Screen%20Light.jpg?raw=true" width="100" alt="Sign Up Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDos%20Screen%20Light.jpg?raw=true" width="100" alt="ToDos Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Welcome%20Screen%20Light.jpg?raw=true" width="100" alt="Welcome Screen">
+</p>
+
 
 ## Getting Started
 
@@ -64,7 +78,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgments
 
-- Thanks to everyone who has contributed to the success and improvement of ToDoMate. Your feedback and contributions have been invaluable.
+- Thanks to everyone who has contributed to the success and improvement of ToDoMate.
 - Special thanks to the Firebase team for providing a robust platform for backend services.
 - Kudos to the React Native community for the continuous support and resources.
 
