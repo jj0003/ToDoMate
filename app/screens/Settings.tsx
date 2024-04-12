@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
+import { View, Text, Image, ScrollView ,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
