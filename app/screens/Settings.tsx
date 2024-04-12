@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
+import { View, Text, Image, ScrollView,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
@@ -10,7 +10,7 @@ interface RouterProps {
     navigation: NavigationProp<any, any>;
 }
 
-const Details = ({navigation}:RouterProps) => {
+const Settings = ({navigation}:RouterProps) => {
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -44,34 +44,53 @@ const Details = ({navigation}:RouterProps) => {
 
   return (
     
+    
+    <ScrollView>
         <View style={styles.container}>
-            <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')}/>
+            <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')} />
             <Text style={styles.textHeading}>ToDoMate</Text>
             <Text>
                 Add ToDo's and share them with your friends.
-            </Text>        
+            </Text>
             <Pressable style={styles.buttonSignOut} onPress={signOut}>
                 <Text style={styles.text}>Sign Out</Text>
             </Pressable>
-            <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
-            {loading ? <ActivityIndicator size='large' color='blue'/> : 
-            (
+            <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email} />
+            {loading ? <ActivityIndicator size='large' color='blue' /> : (
                 <>
                     <Pressable style={styles.buttonSignOut} onPress={resetPassword}>
                         <Text style={styles.text}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
                     </Pressable>
                 </>
-            )
-            }
+            )}
             <Text>
                 Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://budget-mate.org/todomate.html')}>here</Text>.
             </Text>
-            
+            <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')} />
+            <Text style={styles.textHeading}>ToDoMate</Text>
+            <Text>
+                Add ToDo's and share them with your friends.
+            </Text>
+            <Pressable style={styles.buttonSignOut} onPress={signOut}>
+                <Text style={styles.text}>Sign Out</Text>
+            </Pressable>
+            <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email} />
+            {loading ? <ActivityIndicator size='large' color='blue' /> : (
+                <>
+                    <Pressable style={styles.buttonSignOut} onPress={resetPassword}>
+                        <Text style={styles.text}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
+                    </Pressable>
+                </>
+            )}
+            <Text>
+                Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://budget-mate.org/todomate.html')}>here</Text>.
+            </Text>
         </View>
+    </ScrollView>
     )
 
 }
-export default Details
+export default Settings
 
 
 const styles = StyleSheet.create({

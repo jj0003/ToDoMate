@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import List from './app/screens/List';
 import Login from './app/screens/Login'; 
-import Details from './app/screens/Details';
+import Details from './app/screens/Settings';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH } from './firebaseConfig';
