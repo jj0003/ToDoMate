@@ -1,8 +1,8 @@
-import { View, Text, Image, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import React, { useState } from 'react'
+import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 
 interface RouterProps {

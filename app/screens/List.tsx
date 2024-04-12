@@ -1,7 +1,7 @@
-import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
-import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../../firebaseConfig';
+import { addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
@@ -22,7 +22,6 @@ const List = ({ navigation }: RouterProps) => {
     const [todo, setTodo] = useState('');
     const auth = getAuth();
     const user = auth.currentUser;
-    const db = getFirestore();
 
     
     useEffect(() => {
@@ -59,42 +58,67 @@ const List = ({ navigation }: RouterProps) => {
         }
     }
     
-
-    const renderTodo = ({item}: any) => {
-
-        const ref = doc(FIRESTORE_DB, `todos/${item.id}`);
-
+    const TodoItem = ({ item }) => {
+        const [username, setUsername] = useState('');
+        const auth = getAuth();
+        const db = getFirestore(); // Ensure you've initialized Firestore correctly
+      
+        useEffect(() => {
+          const fetchUsername = async () => {
+            if (item.userID) {
+              const userRef = doc(db, `users/${item.userID}`);
+              const userSnap = await getDoc(userRef);
+      
+              if (userSnap.exists()) {
+                setUsername(userSnap.data().username);
+              } else {
+                console.log("No such user document!");
+              }
+            }
+          };
+      
+          fetchUsername();
+        }, [item.userID]);
+      
         const toggleDone = async () => {
-            updateDoc(ref, {done: !item.done});
-        }
+          const ref = doc(db, `todos/${item.id}`);
+          await updateDoc(ref, { done: !item.done });
+        };
+      
         const deleteItem = async () => {
-            deleteDoc(ref);
-        }
+          const ref = doc(db, `todos/${item.id}`);
+          await deleteDoc(ref);
+        };
+      
         return (
-            <View style={styles.todoContainer}>
-                <TouchableOpacity style={styles.todo} onPress={toggleDone}>
-                    {item.done && <Ionicons name="checkmark-circle-outline" size={24} color="green" />}
-                    {!item.done && <Ionicons name="ellipse-outline" size={24} color="grey" />}
-                    <Text style={styles.todoText}>{item.title}</Text>
-                </TouchableOpacity>
-                <Ionicons name="trash-outline" size={24} color="red" onPress={deleteItem}/>
-            </View>
-        )
-    }
+          <View style={styles.todoContainer}>
+            <TouchableOpacity style={styles.todo} onPress={toggleDone}>
+              {item.done ? <Ionicons name="checkmark-circle-outline" size={24} color="green" /> : <Ionicons name="ellipse-outline" size={24} color="grey" />}
+              <View>
+                <Text style={styles.todoText}>{item.title}</Text>
+                <Text style={styles.createdByText}>Created by {username}</Text>
+              </View>
+            </TouchableOpacity>
+            <Ionicons name="trash-outline" size={24} color="red" onPress={deleteItem} />
+          </View>
+        );
+      };
     return (
 
     <View style={styles.container}>
+        <FlatList
+            data={todos}
+            keyExtractor={(todo: Todo) => todo.id}
+            renderItem={({ item }) => <TodoItem item={item} />}
+
+        />
         <View style={styles.form}>
             <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
             <Pressable style={styles.button} onPress={addTodo} disabled={todo===''}>
                 <Text style={styles.text}>Add Todo</Text>
             </Pressable>
         </View>
-        <FlatList
-            data={todos}
-            keyExtractor={(todo: Todo) => todo.id}
-            renderItem={renderTodo}
-        />
+        
     </View>
 
   )
@@ -104,13 +128,10 @@ export default List
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20,
-        marginVertical: 20,
-        borderWidth: 1,
-        borderRadius: 10,
+        marginHorizontal: 10,
+        marginVertical: 10,
         padding: 20,
-        height: '90%',
-    },
+        flex: 1,},
     form: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -147,13 +168,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10,
         height: 50,
-        borderWidth: 1,
         padding: 10,
         borderRadius: 50,
     },
     todoText:{
-        flex: 1,
         paddingHorizontal: 5,
+    },
+    createdByText: {
+        paddingHorizontal: 5,
+        fontSize: 12,
+        fontStyle: 'italic'
     },
     todo:{
         flex: 1,

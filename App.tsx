@@ -1,8 +1,7 @@
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import { Button, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import List from './app/screens/List';
 import Login from './app/screens/Login'; 
 import Details from './app/screens/Details';
@@ -70,6 +69,7 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
 }
 

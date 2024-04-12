@@ -1,8 +1,9 @@
 import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import React, {  useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 
 interface RouterProps {
@@ -11,6 +12,8 @@ interface RouterProps {
 
 
 const SignUp = ({navigation}: RouterProps) => {
+    const[username, setUsername] = useState('');
+    const[name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,8 +21,14 @@ const SignUp = ({navigation}: RouterProps) => {
     const signUp = async () => {
         setLoading(true);
         try {
-            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            console.log(response);
+            const userCredential  = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            const user = userCredential.user;
+            console.log(userCredential);
+            await setDoc(doc(FIRESTORE_DB, "users", user.uid), {
+                username: username,
+                useremail: email,
+                name : name,
+            });
         } catch (error: any) {
             alert("Error signing up: " + error.message);
             console.log(error);
@@ -34,6 +43,9 @@ const SignUp = ({navigation}: RouterProps) => {
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')}/>
             <Text style={styles.textHeading}>Welcome.</Text>
+            <Text style={styles.textMessage}>Let's get you all set up! Please fill in your details below. Remember, a unique and strong password is key to keeping your account secure.</Text>
+            <TextInput style={styles.input} placeholder="Name" autoCapitalize='none' onChangeText={( inputName: string) => setUsername(inputName)} value={name}/>
+            <TextInput style={styles.input} placeholder="Username" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
             <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
             <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
             {loading ? <ActivityIndicator size='large' color='blue'/> : 
@@ -45,7 +57,7 @@ const SignUp = ({navigation}: RouterProps) => {
                 </>
             )
             }
-            <Text>
+            <Text style={styles.signInText}>
                 Already have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
             </Text>
         </KeyboardAvoidingView>
@@ -58,12 +70,11 @@ export default SignUp
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
+        justifyContent:'center',
         width: '100%',
         height: '100%',
         gap: 20,
         padding: 20,
-        alignItems: 'center',
     },
     containerAvoid: {
         justifyContent: 'center',
@@ -71,10 +82,10 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
     },
-
     logo: {
-        width: 100,
-        height: 100,
+        alignSelf: 'center',
+        width: 150,
+        height: 150,
     },
     input: {
         borderWidth: 1,
@@ -108,7 +119,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontWeight: 'bold',
+    },
+    textMessage: {
+        color: 'grey',
+
     },
     textSignUp: {
         color: 'blue',
@@ -118,8 +132,12 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
     },
+
     textForgotPassword: {
         textAlign: 'right', 
         width: '100%' ,
+    },
+    signInText: {
+        textAlign: 'center',
     },
 })

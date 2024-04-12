@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet, Pressable, TextInput, ActivityIndicator,
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
-import { User, sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 
 
