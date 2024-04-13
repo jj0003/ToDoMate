@@ -4,7 +4,6 @@ import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -33,12 +32,6 @@ const SignUp = ({navigation}: RouterProps) => {
             console.log(userCredential);
             let imageUrl = '';
         if (image) {
-            const imageName = `profilePictures/${user.uid}/${new Date().toISOString()}`;
-            const response = await fetch(image);
-            const blob = await response.blob();
-            const ref = storage().ref(imageName);
-            const snapshot = await ref.put(blob);
-            imageUrl = await snapshot.ref.getDownloadURL();
         }
             await setDoc(doc(FIRESTORE_DB, "users", user.uid), {
                 name : name,
@@ -71,58 +64,56 @@ const SignUp = ({navigation}: RouterProps) => {
       };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-    <ScrollView>
-        <View>
-            <KeyboardAvoidingView behavior='padding' style={styles.container}>
-                <Text style={styles.textHeading}>Let's get you goin', 
-                {
-                    name ? (
-                        <Text> {name}!</Text>
-                    ) : (
-                        <Text> Mate!</Text>
-                    )
-                }
-                
-                </Text>
-                <Text style={styles.textMessage}>Please fill in your details below. Remember, a unique and strong password is key to keeping your account secure.</Text>
-                {
-                    image ? (
-                        <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
-                            <Image source={{ uri: image }} style={styles.uploadProfileImage}/>
-                        </TouchableOpacity>
-                    ) : (
-                        <>
-                            <Text>Upload Profile Picture</Text>
-                            <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
-                                <Ionicons name="cloud-upload-outline" size={60} color="blue" onPress={pickImage} style={styles.uploadImage} />
+
+            <View>
+                <KeyboardAvoidingView behavior='padding' style={styles.container}>
+                    <Text style={styles.textHeading}>Let's get you goin', 
+                    {
+                        name ? (
+                            <Text> {name}!</Text>
+                        ) : (
+                            <Text> Mate!</Text>
+                        )
+                    }
+                    
+                    </Text>
+                    <Text style={styles.textMessage}>Please fill in your details below. Remember, a unique and strong password is key to keeping your account secure.</Text>
+                    {
+                        image ? (
+                            <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
+                                <Image source={{ uri: image }} style={styles.uploadProfileImage}/>
                             </TouchableOpacity>
+                        ) : (
+                            <>
+                                <Text>Upload Profile Picture</Text>
+                                <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
+                                    <Ionicons name="cloud-upload-outline" size={60} color="blue" onPress={pickImage} style={styles.uploadImage} />
+                                </TouchableOpacity>
 
-                        </> 
+                            </> 
+                        )
+                    }
+                    <TextInput style={styles.input} placeholder="Name*" autoCapitalize='none' onChangeText={( inputName: string) => setName(inputName)} value={name}/>
+                    <TextInput style={styles.input} placeholder="Username*" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
+                    <TextInput style={styles.input} placeholder="Email*" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
+                    <TextInput style={styles.input} placeholder="Password*" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
+
+
+                    {loading ? <ActivityIndicator size='large' color='blue'/> : 
+                    (
+                        <>
+                            <Pressable style={styles.buttonSignIn} onPress={signUp}>
+                                <Text style={styles.text}>Sign Up</Text>
+                            </Pressable>
+                        </>
                     )
-                }
-                <TextInput style={styles.input} placeholder="Name*" autoCapitalize='none' onChangeText={( inputName: string) => setName(inputName)} value={name}/>
-                <TextInput style={styles.input} placeholder="Username*" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
-                <TextInput style={styles.input} placeholder="Email*" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
-                <TextInput style={styles.input} placeholder="Password*" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
+                    }
+                    <Text style={styles.signInText}>
+                        Already have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
+                    </Text>
+                </KeyboardAvoidingView>
+            </View>
 
-
-                {loading ? <ActivityIndicator size='large' color='blue'/> : 
-                (
-                    <>
-                        <Pressable style={styles.buttonSignIn} onPress={signUp}>
-                            <Text style={styles.text}>Sign Up</Text>
-                        </Pressable>
-                    </>
-                )
-                }
-                <Text style={styles.signInText}>
-                    Already have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
-                </Text>
-            </KeyboardAvoidingView>
-        </View>
-    </ScrollView>
-    </SafeAreaView>
   )
 }
 
@@ -131,13 +122,12 @@ export default SignUp
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40,
-        justifyContent:'center',
+        justifyContent: 'flex-end',
         width: '100%',
         height: '100%',
         gap: 20,
         padding: 20,
-
+        alignItems: 'center',
     },
     containerAvoid: {
         justifyContent: 'center',
