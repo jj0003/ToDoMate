@@ -82,15 +82,20 @@ const SignUp = ({navigation}: RouterProps) => {
                 <View style={styles.bottomContainer}>
                     {
                         image ? (
-                            <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
-                                <Image source={{ uri: image }} style={styles.uploadImage}/>
-                            </TouchableOpacity>
+                            <View style={styles.nameAndUserNameContainer}>
+                                <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
+                                    <Image source={{ uri: image }} style={styles.uploadImage}/>
+                                </TouchableOpacity>
+                                <Text>Edit Your Profile Picture</Text>
+                            </View>
                         ) : (
                             <>
-                                <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
-                                    <Ionicons name="cloud-upload-outline" size={40} onPress={pickImage} style={styles.uploadImage} />
-                                </TouchableOpacity>
-                                <Text>Upload Profile Picture</Text>
+                                <View style={styles.nameAndUserNameContainer}>
+                                    <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
+                                        <Ionicons name="cloud-upload-outline" size={40} onPress={pickImage} style={styles.uploadIcon} />
+                                    </TouchableOpacity>
+                                    <Text>Upload Your Profile Picture</Text>
+                                </View>
                             </> 
                         )
                     }
@@ -127,7 +132,7 @@ export default SignUp
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         width: '100%',
         height: '100%',
         gap: 20,
@@ -137,7 +142,6 @@ const styles = StyleSheet.create({
     topContainer: {
         alignItems: 'center',
         gap: 20,
-        marginTop: 100,
     },
     bottomContainer: {
         width: '100%',
@@ -146,7 +150,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 20,
         padding: 20,
-        marginBottom: 100,
     },
     containerAvoid: {
         justifyContent: 'center',
@@ -155,6 +158,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     nameAndUserNameContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
         flexDirection: 'row',
         gap: 10,
         width: '100%',
@@ -209,32 +214,27 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     uploadContainer: {
-        height: 70,
-        width: 70,
+        height: 50,
+        width: 50,
         borderRadius: 9999,
         backgroundColor: colors.background,
+        justifyContent: 'center', // Centers children vertically within the container
+        alignItems: 'center', // Centers children horizontally within the container
+    },
+    uploadIcon: {
+        borderRadius: 9999, 
+        color: colors.primary,
     },
     uploadImage: {
-        height: 70,
-        width: 70,
+        width: 50,
+        height: 50,
         borderRadius: 9999, 
         color: colors.primary,
     },
     imagePressable: {
-        width: 70,
-        height: 70,
+        width: 50,
+        height: 50,
         borderRadius: 9999,
-    },
-    uploadImageText: {
-        flex: 1,
-        alignSelf: 'center',
-        textAlign: 'center',
-    },
-    uploadProfileImage: {
-        height: 70,
-        width: 70,
-        padding: 10,
-        borderRadius: 9999,       
     },
 
 })

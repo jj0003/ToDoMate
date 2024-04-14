@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     topContainer: {
         alignItems: 'center',
         gap: 20,
-        marginTop: 100,
     },
     bottomContainer: {
         width: '100%',
