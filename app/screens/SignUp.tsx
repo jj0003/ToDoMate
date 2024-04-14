@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView,TouchableOpacity, ScrollView, SafeAreaView  } from 'react-native'
+import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView,TouchableOpacity, ScrollView, SafeAreaView, ImageBackground  } from 'react-native'
 import React, {  useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import colors from '../../assets/colors';
 
 
 
@@ -64,10 +65,11 @@ const SignUp = ({navigation}: RouterProps) => {
       };
 
   return (
+        <ImageBackground source={require('../../assets/ToDoMate-SignUp_Background.jpg')}>
+            <KeyboardAvoidingView behavior='padding' style={styles.container}>
 
-            <View>
-                <KeyboardAvoidingView behavior='padding' style={styles.container}>
-                    <Text style={styles.textHeading}>Let's get you goin', 
+                <View style={styles.topContainer}>
+                    <Text style={styles.textHeading}>Let's get ya goin', 
                     {
                         name ? (
                             <Text> {name}!</Text>
@@ -75,26 +77,28 @@ const SignUp = ({navigation}: RouterProps) => {
                             <Text> Mate!</Text>
                         )
                     }
-                    
                     </Text>
-                    <Text style={styles.textMessage}>Please fill in your details below. Remember, a unique and strong password is key to keeping your account secure.</Text>
+                </View>
+                <View style={styles.bottomContainer}>
                     {
                         image ? (
                             <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
-                                <Image source={{ uri: image }} style={styles.uploadProfileImage}/>
+                                <Image source={{ uri: image }} style={styles.uploadImage}/>
                             </TouchableOpacity>
                         ) : (
                             <>
-                                <Text>Upload Profile Picture</Text>
                                 <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
-                                    <Ionicons name="cloud-upload-outline" size={60} color="blue" onPress={pickImage} style={styles.uploadImage} />
+                                    <Ionicons name="cloud-upload-outline" size={40} onPress={pickImage} style={styles.uploadImage} />
                                 </TouchableOpacity>
-
+                                <Text>Upload Profile Picture</Text>
                             </> 
                         )
                     }
-                    <TextInput style={styles.input} placeholder="Name*" autoCapitalize='none' onChangeText={( inputName: string) => setName(inputName)} value={name}/>
-                    <TextInput style={styles.input} placeholder="Username*" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
+                    <View style={styles.nameAndUserNameContainer}>
+                        <TextInput style={styles.userNameInput} placeholder="Name*" autoCapitalize='none' onChangeText={( inputName: string) => setName(inputName)} value={name}/>
+                        <TextInput style={styles.userNameInput} placeholder="Username*" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
+                    
+                    </View>
                     <TextInput style={styles.input} placeholder="Email*" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
                     <TextInput style={styles.input} placeholder="Password*" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
 
@@ -102,8 +106,8 @@ const SignUp = ({navigation}: RouterProps) => {
                     {loading ? <ActivityIndicator size='large' color='blue'/> : 
                     (
                         <>
-                            <Pressable style={styles.buttonSignIn} onPress={signUp}>
-                                <Text style={styles.text}>Sign Up</Text>
+                            <Pressable style={styles.buttonSignUp} onPress={signUp}>
+                                <Text style={styles.buttonTextSignUp}>Sign Up</Text>
                             </Pressable>
                         </>
                     )
@@ -111,8 +115,9 @@ const SignUp = ({navigation}: RouterProps) => {
                     <Text style={styles.signInText}>
                         Already have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
                     </Text>
-                </KeyboardAvoidingView>
-            </View>
+                </View>
+            </KeyboardAvoidingView>
+        </ImageBackground>
 
   )
 }
@@ -129,16 +134,30 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
     },
+    topContainer: {
+        alignItems: 'center',
+        gap: 20,
+        marginTop: 100,
+    },
+    bottomContainer: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+        gap: 20,
+        padding: 20,
+        marginBottom: 100,
+    },
     containerAvoid: {
         justifyContent: 'center',
         width: '100%',
         height: '100%',
         alignItems: 'center',
     },
-    logo: {
-        alignSelf: 'center',
-        width: 150,
-        height: 150,
+    nameAndUserNameContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        width: '100%',
     },
     input: {
         borderWidth: 1,
@@ -148,29 +167,25 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'white',
     },
-    buttonSignIn: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        height: 50,
-        width: '100%',
-        borderRadius: 10,
-        backgroundColor: 'blue',
-        borderColor: 'white',
+    userNameInput: {
+        flex: 1,
         borderWidth: 1,
-    },
-    buttonSignUp:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
         height: 50,
+        padding: 10,
         width: '100%',
         borderRadius: 10,
         backgroundColor: 'white',
-        borderColor: 'blue',
-        borderWidth: 1,
     },
-    text: {
+    buttonSignUp: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        height: 50,
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: colors.primary,
+    },
+    buttonTextSignUp: {
         color: 'white',
     },
     textMessage: {
@@ -178,7 +193,7 @@ const styles = StyleSheet.create({
 
     },
     textSignUp: {
-        color: 'blue',
+        color: colors.primary,
         fontWeight: 'bold',
     },   
     textHeading: {
@@ -193,22 +208,22 @@ const styles = StyleSheet.create({
     signInText: {
         textAlign: 'center',
     },
-    image: {
-        width: 100,
-        height: 100,
-    },
     uploadContainer: {
-        flexDirection: 'column',
-        height: 100,
-        width: 100,
-        padding: 10,
+        height: 70,
+        width: 70,
         borderRadius: 9999,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
     },
     uploadImage: {
-        flex: 2,
-        alignContent: 'center',
-        alignSelf: 'center',
+        height: 70,
+        width: 70,
+        borderRadius: 9999, 
+        color: colors.primary,
+    },
+    imagePressable: {
+        width: 70,
+        height: 70,
+        borderRadius: 9999,
     },
     uploadImageText: {
         flex: 1,
@@ -216,14 +231,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     uploadProfileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 9999,        
+        height: 70,
+        width: 70,
+        padding: 10,
+        borderRadius: 9999,       
     },
-    imagePressable: {
-        width: 100,
-        height: 100,
-        borderRadius: 9999,
-        alignSelf: 'flex-start',
-    }
+
 })

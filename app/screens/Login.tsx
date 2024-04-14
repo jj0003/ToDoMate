@@ -1,8 +1,9 @@
-import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import colors from '../../assets/colors';
 
 
 interface RouterProps {
@@ -30,29 +31,36 @@ const Login = ({navigation}: RouterProps) => {
     }
     
   return (
-    <View>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')}/>
-            <Text style={styles.textHeading}>Welcome back.</Text>
-            <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
 
-            <Text style={styles.textForgotPassword} onPress={() => navigation.navigate('ResetPassword')}>Forgot your password?</Text>
-            
-            {loading ? <ActivityIndicator size='large' color='blue'/> : 
-            (
-                <>
-                    <Pressable style={styles.buttonSignIn} onPress={signIn}>
-                        <Text style={styles.text}>Log In</Text>
-                    </Pressable>
-                </>
-            )
-            }
-            <Text>
-                Don't have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('SignUp')}>Sign up</Text>
-            </Text>
+    <ImageBackground source={require('../../assets/ToDoMate-LogIn_Background.jpg')}>
+        <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <View style={styles.topContainer}>
+                <Text style={styles.textHeading}>Welcome back.</Text>            
+            </View>
+            <View style={styles.bottomContainer}>
+                <Text style={styles.textSubheading}>
+                    Log in to continue
+                </Text>
+                <TextInput style={styles.textInput} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
+                <TextInput style={styles.textInput} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
+
+                <Text style={styles.textForgotPassword} onPress={() => navigation.navigate('ResetPassword')}>Forgot your password?</Text>
+                
+                { loading ? <ActivityIndicator size='large' color='blue'/> : 
+                (
+                    <>
+                        <Pressable style={styles.buttonLogIn} onPress={signIn}>
+                            <Text style={styles.text}>Log In</Text>
+                        </Pressable>
+                    </>
+                )
+                }
+                <Text>
+                    Don't have an account? <Text style={styles.textSignUp} onPress={() => navigation.navigate('SignUp')}>Sign up</Text>
+                </Text>
+            </View>
         </KeyboardAvoidingView>
-    </View>
+    </ImageBackground>
   )
 }
 
@@ -74,12 +82,24 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
     },
-
+    topContainer: {
+        alignItems: 'center',
+        gap: 20,
+        marginTop: 100,
+    },
+    bottomContainer: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+        gap: 20,
+        padding: 20,
+    },
     logo: {
         width: 100,
         height: 100,
     },
-    input: {
+    textInput: {
         borderWidth: 1,
         height: 50,
         padding: 10,
@@ -87,34 +107,27 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'white',
     },
-    buttonSignIn: {
+    
+    buttonLogIn: {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
         height: 50,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'blue',
-        borderColor: 'white',
-        borderWidth: 1,
-    },
-    buttonSignUp:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        height: 50,
-        width: '100%',
-        borderRadius: 10,
-        backgroundColor: 'white',
-        borderColor: 'blue',
-        borderWidth: 1,
+        backgroundColor: colors.primary,
     },
     text: {
         color: 'white',
         fontWeight: 'bold',
     },
+    textSubheading:{
+        fontWeight: 'bold',
+        color: 'black',
+        fontSize: 16,
+    },
     textSignUp: {
-        color: 'blue',
+        color: colors.primary,
         fontWeight: 'bold',
     },   
     textHeading: {
