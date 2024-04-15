@@ -67,9 +67,8 @@ const SignUp = ({navigation}: RouterProps) => {
   return (
         <ImageBackground source={require('../../assets/ToDoMate-SignUp_Background.jpg')}>
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
-
-                <View style={styles.topContainer}>
-                    <Text style={styles.textHeading}>Let's get ya goin', 
+                <View style={styles.mainContainer}>
+                <Text style={styles.textHeading}>Let's get ya goin', 
                     {
                         name ? (
                             <Text> {name}!</Text>
@@ -78,8 +77,6 @@ const SignUp = ({navigation}: RouterProps) => {
                         )
                     }
                     </Text>
-                </View>
-                <View style={styles.bottomContainer}>
                     {
                         image ? (
                             <View style={styles.nameAndUserNameContainer}>
@@ -94,7 +91,7 @@ const SignUp = ({navigation}: RouterProps) => {
                                     <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
                                         <Ionicons name="cloud-upload-outline" size={40} onPress={pickImage} style={styles.uploadIcon} />
                                     </TouchableOpacity>
-                                    <Text>Upload Your Profile Picture</Text>
+                                    <Text style={styles.text}>Upload Your Profile Picture</Text>
                                 </View>
                             </> 
                         )
@@ -143,7 +140,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 20,
     },
-    bottomContainer: {
+    mainContainer: {
         width: '100%',
         backgroundColor: 'white',
         borderRadius: 10,
@@ -166,20 +163,22 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
+        borderColor: colors.border,
         height: 50,
         padding: 10,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
     },
     userNameInput: {
         flex: 1,
         borderWidth: 1,
+        borderColor: colors.border,
         height: 50,
         padding: 10,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
     },
     buttonSignUp: {
         alignItems: 'center',
@@ -193,6 +192,10 @@ const styles = StyleSheet.create({
     buttonTextSignUp: {
         color: 'white',
     },
+    text: {
+        color: colors.text,
+        textAlign: 'left',
+    },
     textMessage: {
         color: 'grey',
 
@@ -204,6 +207,8 @@ const styles = StyleSheet.create({
     textHeading: {
         fontSize: 30,
         fontWeight: 'bold',
+        width: '100%',
+        textAlign: 'left',
     },
 
     textForgotPassword: {
@@ -218,8 +223,8 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 9999,
         backgroundColor: colors.background,
-        justifyContent: 'center', // Centers children vertically within the container
-        alignItems: 'center', // Centers children horizontally within the container
+        justifyContent: 'center', 
+        alignItems: 'center', 
     },
     uploadIcon: {
         borderRadius: 9999, 

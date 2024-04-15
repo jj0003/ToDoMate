@@ -12,6 +12,8 @@ interface Colors {
     error: string;
     warning: string;
     info: string;
+    white: string;
+    black: string;
 }
 
 const colors: Colors = {
@@ -26,7 +28,9 @@ const colors: Colors = {
     success: '#4CAF50',
     error: '#f44336',
     warning: '#ffeb3b',
-    info: '#2196f3'
+    info: '#2196f3',
+    white: '#ffffff',
+    black: '#000000',
 };
 
 export default colors;

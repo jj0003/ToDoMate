@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import {  sendPasswordResetEmail } from 'firebase/auth';
+import colors from '../../assets/colors';
 
 
 interface RouterProps {
@@ -30,36 +31,36 @@ const ResetPassword = ({navigation}: RouterProps) => {
         }
     }
   return (
-    <View>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-        {!emailSent ? (
-                <>
-                    <Text style={styles.textHeading}>Having Trouble??</Text>
-                    <Text>Please enter your email to reset your password.</Text>
-                    <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
-                    {loading ? <ActivityIndicator size='large' color='blue'/> : 
-                    (
-                        <Pressable style={styles.buttonSignOut} onPress={resetPassword}>
-                            <Text style={styles.text}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
-                        </Pressable>
-                    )}
-                    <Text>
-                        Remembered your password? <Text style={styles.textSignUp} onPress={() => navigation.navigate('Login')}>Login</Text>
-                    </Text>
-                </>
-            ) : (
-                <>
-                    <Text style={styles.textHeading}>Check Your Inbox!</Text>
-                    <Text style={{color: 'green'}}>Email sent successfully. Please check your inbox.</Text>
-                    <Text>
-                        Didn't recieve an email? <Text style={styles.textSignUp} onPress={() => setEmailSent(false)}>Try again!</Text>
-                    </Text>
-                </>
-            )}
-
-           
-        </KeyboardAvoidingView>
-    </View>
+        <ImageBackground source={require('../../assets/ToDoMate-ResetPassword_Background.jpg')}>
+            <KeyboardAvoidingView behavior='padding' style={styles.container}>
+                <View style={styles.topContainer}>
+                {!emailSent ? (
+                    <>
+                        <Text style={styles.textHeading}>Having Trouble??</Text>
+                        <Text style={styles.text}>Please enter your email to reset your password.</Text>
+                        <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
+                        {loading ? <ActivityIndicator size='large' color='blue'/> : 
+                        (
+                            <Pressable style={styles.buttonResetPassword} onPress={resetPassword}>
+                                <Text style={styles.resetPasswordText}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
+                            </Pressable>
+                        )}
+                        <Text>
+                            Remembered your password? <Text style={styles.textHighlighted} onPress={() => navigation.navigate('Login')}>Login</Text>
+                        </Text>
+                    </>
+                ) : (
+                    <>
+                        <Text style={styles.textHeading}>Check Your Inbox!</Text>
+                        <Text style={{color: 'green'}}>Email sent successfully. Please check your inbox.</Text>
+                        <Text>
+                            Didn't recieve an email? <Text style={styles.textHighlighted} onPress={() => setEmailSent(false)}>Try again!</Text>
+                        </Text>
+                    </>
+                )}
+                </View>
+            </KeyboardAvoidingView>
+        </ImageBackground>
   )
 }
 
@@ -75,50 +76,55 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
     },
+    topContainer: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+        gap: 20,
+        padding: 20,
+    },
     containerAvoid: {
         justifyContent: 'center',
         width: '100%',
         height: '100%',
         alignItems: 'center',
     },
-
-    logo: {
-        width: 100,
-        height: 100,
-    },
     input: {
         borderWidth: 1,
+        borderColor: colors.border,
         height: 50,
         padding: 10,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
     },
-    buttonSignOut: {
+    buttonResetPassword: {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
         height: 50,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'blue',
-        borderColor: 'white',
-        borderWidth: 1,
+        backgroundColor: colors.primary,
     },
     text: {
-        color: 'white',
+        color: colors.text,
+        width: '100%',
+        textAlign: 'left',
+    },
+    resetPasswordText: {
+        color: colors.white,
         fontWeight: 'bold',
     },
-    textSignUp: {
-        color: 'blue',
+    textHighlighted: {
+        color: colors.primary,
         fontWeight: 'bold',
     },   
     textHeading: {
         fontSize: 30,
         fontWeight: 'bold',
-    },
-    textForgotPassword: {
-        textAlign: 'right', 
-        width: '100%' ,
+        width: '100%',
+        textAlign: 'left',
     },
 })

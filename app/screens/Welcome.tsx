@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     bottomContainer: {
         width: '100%',
         backgroundColor: 'white',
-        borderRadius: 10,
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
         alignItems: 'center',
         gap: 20,
         padding: 20,

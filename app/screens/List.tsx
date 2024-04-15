@@ -110,7 +110,6 @@ const List = ({ navigation }: RouterProps) => {
             data={todos}
             keyExtractor={(todo: Todo) => todo.id}
             renderItem={({ item }) => <TodoItem item={item} />}
-
         />
         <View style={styles.form}>
             <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>

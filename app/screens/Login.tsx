@@ -34,10 +34,8 @@ const Login = ({navigation}: RouterProps) => {
 
     <ImageBackground source={require('../../assets/ToDoMate-LogIn_Background.jpg')}>
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <View style={styles.topContainer}>
+            <View style={styles.mainContainer}>
                 <Text style={styles.textHeading}>Welcome back.</Text>            
-            </View>
-            <View style={styles.bottomContainer}>
                 <Text style={styles.textSubheading}>
                     Log in to continue
                 </Text>
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 20,
     },
-    bottomContainer: {
+    mainContainer: {
         width: '100%',
         backgroundColor: 'white',
         borderRadius: 10,
@@ -100,11 +98,12 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderWidth: 1,
+        borderColor: colors.border,
         height: 50,
         padding: 10,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
     },
     
     buttonLogIn: {
@@ -121,9 +120,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     textSubheading:{
-        fontWeight: 'bold',
-        color: 'black',
-        fontSize: 16,
+        color: colors.text,
+        width: '100%',
+        textAlign: 'left',
     },
     textSignUp: {
         color: colors.primary,
@@ -132,6 +131,8 @@ const styles = StyleSheet.create({
     textHeading: {
         fontSize: 30,
         fontWeight: 'bold',
+        width: '100%',
+        textAlign: 'left',
     },
     textForgotPassword: {
         textAlign: 'right', 
