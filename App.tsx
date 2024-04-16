@@ -11,7 +11,6 @@ import { FIREBASE_AUTH } from './firebaseConfig';
 import Welcome from './app/screens/Welcome';
 import SignUp from './app/screens/SignUp';
 import ResetPassword from './app/screens/ResetPassword';
-import colors from './assets/colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,12 +23,7 @@ interface RouterProps {
 function InsideStackScreens({ navigation }: RouterProps) {
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen 
-        name="ToDo's" 
-        component={List} 
-        options={{
-          headerTitle: 'ToDo\'s',
-          headerRight: () => (
+      <InsideStack.Screen name="ToDo's" component={List} options={{ headerTitle: 'ToDo\'s', headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Ionicons name="settings" size={24} color="black" />
             </TouchableOpacity>
@@ -37,6 +31,16 @@ function InsideStackScreens({ navigation }: RouterProps) {
         }}
       />
       <InsideStack.Screen name="Settings" component={Details} options={{ headerShown: true, headerBackTitle: 'Back' }} />
+    </InsideStack.Navigator>
+  );
+}
+function OutsideStackScreens({ navigation }: RouterProps) {
+  return (
+    <InsideStack.Navigator>
+          <InsideStack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+          <InsideStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <InsideStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+          <InsideStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: true, title: 'Reset Your Password', headerBackTitle: 'Back' }} />
     </InsideStack.Navigator>
   );
 }
@@ -53,25 +57,12 @@ export default function App() {
   }, []);
   return (
     <NavigationContainer>
-      <StatusBar
-        backgroundColor={"transparent"}
-        translucent={true}
-        barStyle='dark-content'
-      />
+      <StatusBar backgroundColor={"transparent"} translucent={true} barStyle='dark-content'/>
       <Stack.Navigator initialRouteName='Welcome'>
         {user ? (
-          <>
           <Stack.Screen name="InsideStackScreens" component={InsideStackScreens} options={{headerShown: false}} />
-          </>
-          
         ) : (
-          <>
-          <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: true, title: 'Reset Your Password', headerBackTitle: 'Back' }} />
-          </>
-
+          <Stack.Screen name="OutsideStackScreens" component={OutsideStackScreens} options={{ headerShown: false }} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     },
     buttonTextSignUp: {
         color: 'white',
+        fontWeight: 'bold',
     },
     text: {
         color: colors.text,
