@@ -1,10 +1,11 @@
-import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ImageBackground, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
+import colors from '../../assets/colors';
 
 export interface Todo{
     title: string;
@@ -105,20 +106,22 @@ const List = ({ navigation }: RouterProps) => {
       };
     return (
 
-    <View style={styles.container}>
-        <FlatList
-            data={todos}
-            keyExtractor={(todo: Todo) => todo.id}
-            renderItem={({ item }) => <TodoItem item={item} />}
-        />
-        <View style={styles.form}>
-            <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
-            <Pressable style={styles.button} onPress={addTodo} disabled={todo===''}>
-                <Text style={styles.text}>Add Todo</Text>
-            </Pressable>
-        </View>
-        
-    </View>
+      <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
+        <KeyboardAvoidingView behavior='padding' style={styles.container}>
+          <FlatList
+              style={styles.todoConatiner}
+              data={todos}
+              keyExtractor={(todo: Todo) => todo.id}
+              renderItem={({ item }) => <TodoItem item={item} />}
+          />
+          <View style={styles.form}>
+              <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
+              <Pressable style={styles.button} onPress={addTodo} disabled={todo===''}>
+                  <Text style={styles.text}>Add ToDo</Text>
+              </Pressable>
+          </View>
+      </KeyboardAvoidingView>
+    </ImageBackground>
 
   )
 }
@@ -127,15 +130,21 @@ export default List
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 10,
-        marginVertical: 10,
+        height: '100%',
+        width: '100%',
         padding: 20,
-        flex: 1,},
+    },
+    todoConatiner:{
+      backgroundColor: colors.white,
+      padding: 20,
+      marginBottom:20,
+      borderRadius: 10
+    },
     form: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 40,
     },
     input: {
         flex: 1,
@@ -144,7 +153,8 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 10,
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
+        borderColor: colors.border,
     },
     button: {
         alignItems: 'center',
@@ -152,23 +162,22 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 50,
         borderRadius: 10,
-        backgroundColor: 'white',
-        borderColor: 'blue',
-        borderWidth: 1,
+        backgroundColor: colors.primary,
     },
     text: {
-        color: 'blue',
+        color: colors.white,
         fontWeight: 'bold',
     },
     todoContainer:{
         flexDirection: 'row',
-        backgroundColor: '#fffff',
+        backgroundColor: colors.background,
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 10,
         height: 50,
         padding: 10,
-        borderRadius: 50,
+        borderRadius: 10,
+
     },
     todoText:{
         paddingHorizontal: 5,
