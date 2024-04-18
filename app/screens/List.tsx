@@ -7,6 +7,8 @@ import { NavigationProp } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import colors from '../../assets/colors';
 import { SegmentedControl } from '../components/SegmentedControls';
+import Animated, { FadeIn, FadeInLeft, FadeInRight, FadeInUp, FadeOut, FadeOutLeft, FadeOutRight, FadeOutUp, LightSpeedInLeft, LightSpeedOutRight, SlideInRight, SlideOutLeft, SlideOutRight } from 'react-native-reanimated';
+import SwipeableRow from '../components/SwipeableRow';
 
 export interface Todo{
     title: string;
@@ -120,16 +122,20 @@ const List = ({ navigation }: RouterProps) => {
         };
       
         return (
-          <View style={styles.todoContainer}>
-            <TouchableOpacity style={styles.todo} onPress={toggleDone}>
-              {item.done ? <Ionicons name="checkmark-circle-outline" size={24} color="green" /> : <Ionicons name="ellipse-outline" size={24} color="grey" />}
-              <View>
-                <Text style={styles.todoText}>{item.title}</Text>
-                <Text style={styles.createdByText}>Created by {username}</Text>
+          <SwipeableRow>
+            <Animated.View entering={LightSpeedInLeft} exiting={LightSpeedOutRight} >
+              <View style={styles.todoContainer}>
+                <TouchableOpacity style={styles.todo} onPress={toggleDone}>
+                  {item.done ? <Ionicons name="checkmark-circle-outline" size={24} color="green" /> : <Ionicons name="ellipse-outline" size={24} color="grey" />}
+                  <View>
+                    <Text style={styles.todoText}>{item.title}</Text>
+                    <Text style={styles.createdByText}>Created by {username}</Text>
+                  </View>
+                </TouchableOpacity>
+                <Ionicons name="trash-outline" size={24} color="red" onPress={deleteItem} />
               </View>
-            </TouchableOpacity>
-            <Ionicons name="trash-outline" size={24} color="red" onPress={deleteItem} />
-          </View>
+            </Animated.View>
+            </SwipeableRow>
         );
       };
 
