@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
@@ -41,9 +41,20 @@ const ResetPassword = ({navigation}: RouterProps) => {
                         <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email}/>
                         {loading ? <ActivityIndicator size='large' color='blue'/> : 
                         (
-                            <Pressable style={styles.buttonResetPassword} onPress={resetPassword}>
-                                <Text style={styles.resetPasswordText}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
-                            </Pressable>
+                            <>
+                            {
+                                email === '' ? (
+                                    <TouchableOpacity style={styles.buttonResetPasswordDisabled} onPress={resetPassword}>
+                                        <Text style={styles.resetPasswordText}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity style={styles.buttonResetPassword} onPress={resetPassword}>
+                                        <Text style={styles.resetPasswordText}>Reset Your Password ᴬᴸᴾᴴᴬ</Text>
+                                    </TouchableOpacity>
+                                )
+                                
+                            }
+                            </>
                         )}
                         <Text>
                             Remembered your password? <Text style={styles.textHighlighted} onPress={() => navigation.navigate('Login')}>Login</Text>
@@ -107,6 +118,15 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 10,
         backgroundColor: colors.primary,
+    },
+    buttonResetPasswordDisabled: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        height: 50,
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: colors.disabled,
     },
     text: {
         color: colors.text,

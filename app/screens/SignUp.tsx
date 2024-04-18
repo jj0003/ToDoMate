@@ -108,9 +108,18 @@ const SignUp = ({navigation}: RouterProps) => {
                     {loading ? <ActivityIndicator size='large' color='blue'/> : 
                     (
                         <>
-                            <Pressable style={styles.buttonSignUp} onPress={signUp}>
-                                <Text style={styles.buttonTextSignUp}>Sign Up</Text>
-                            </Pressable>
+                        {
+                            name === '' || username === '' || email === '' ||  password.length < 5  ? (
+                                <TouchableOpacity style={styles.buttonSignUpDisabled} disabled={true}>
+                                    <Text style={styles.text}>Sign Up</Text>
+                                </TouchableOpacity> 
+                            ) : (
+                                <TouchableOpacity style={styles.buttonSignUp} onPress={signUp}>
+                                    <Text style={styles.buttonTextSignUp}>Sign Up</Text>
+                                </TouchableOpacity> 
+                            )
+                            
+                        }
                         </>
                     )
                     }
@@ -189,6 +198,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: colors.primary,
     },
+    buttonSignUpDisabled: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        height: 50,
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: colors.disabled,
+    },
     buttonTextSignUp: {
         color: 'white',
         fontWeight: 'bold',
@@ -210,11 +228,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         width: '100%',
         textAlign: 'left',
-    },
-
-    textForgotPassword: {
-        textAlign: 'right', 
-        width: '100%' ,
     },
     signInText: {
         textAlign: 'center',

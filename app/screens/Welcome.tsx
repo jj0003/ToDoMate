@@ -31,12 +31,12 @@ const Welcome = ({navigation}:RouterProps) => {
                 <Text style={styles.textSubheading}>
                     Please log in or sign up to continue.
                 </Text>
-                <Pressable style={styles.buttonLogIn} onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity style={styles.buttonLogIn} onPress={() => navigation.navigate('Login')}>
                     <Text style={styles.textLogIn}>Log In</Text>
-                </Pressable>
-                <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('SignUp')}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSignUp} onPress={() => navigation.navigate('SignUp')}>
                     <Text style={styles.textSignUp}>Sign Up</Text>
-                </Pressable>
+                </TouchableOpacity>
                 <Text>
                     Learn more about ToDoMate <Text style={styles.textSignUp} onPress={() => Linking.openURL('https://budget-mate.org/todomate.html')}>here</Text>.
                 </Text>

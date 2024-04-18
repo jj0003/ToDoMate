@@ -14,6 +14,8 @@ interface Colors {
     info: string;
     white: string;
     black: string;
+    disabled: string;
+    modal: string;
 }
 
 const colors: Colors = {
@@ -31,6 +33,8 @@ const colors: Colors = {
     info: '#2196f3',
     white: '#ffffff',
     black: '#000000',
+    disabled: '#cccccc',
+    modal: 'rgba(0, 0, 0, 0.5)',
 };
 
 export default colors;

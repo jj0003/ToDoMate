@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
@@ -15,6 +15,14 @@ const Login = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [emailValid, setEmailValid] = useState(true);
+
+    const validateEmail = (inputEmail: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(inputEmail);
+        setEmailValid(isValid);
+        setEmail(inputEmail); 
+    };
 
     const signIn = async () => {
         setLoading(true);
@@ -42,14 +50,26 @@ const Login = ({navigation}: RouterProps) => {
                 <TextInput style={styles.textInput} placeholder="Email" autoCapitalize='none' onChangeText={(inputEmail: string) => setEmail(inputEmail)} value={email}/>
                 <TextInput style={styles.textInput} placeholder="Password" secureTextEntry={true} onChangeText={(inputPassword: string) => setPassword(inputPassword)} value={password}/>
 
-                <Text style={styles.textForgotPassword} onPress={() => navigation.navigate('ResetPassword')}>Forgot your password?</Text>
+                <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => navigation.navigate('ResetPassword')}>
+                    <Text style={styles.textForgotPassword}>Forgot your password?</Text>
+                </TouchableOpacity>
                 
                 { loading ? <ActivityIndicator size='large' color='blue'/> : 
                 (
                     <>
-                        <Pressable style={styles.buttonLogIn} onPress={signIn}>
-                            <Text style={styles.text}>Log In</Text>
-                        </Pressable>
+                        {
+                            email === '' ||  password.length < 5  ? (
+                                <TouchableOpacity style={styles.buttonLogInDisabled} disabled={true}>
+                                    <Text style={styles.text}>Log In</Text>
+                                </TouchableOpacity> 
+                            ) : (
+                                <TouchableOpacity style={styles.buttonLogIn} onPress={signIn}>
+                                    <Text style={styles.text}>Log In</Text>
+                                </TouchableOpacity> 
+                            )
+                            
+                        }
+                        
                     </>
                 )
                 }
@@ -114,6 +134,15 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 10,
         backgroundColor: colors.primary,
+    },
+    buttonLogInDisabled: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        height: 50,
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: colors.disabled,
     },
     text: {
         color: 'white',

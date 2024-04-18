@@ -1,8 +1,9 @@
-import { View, Text, Image, ScrollView ,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking } from 'react-native'
+import { View, Text, Image, ScrollView ,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { sendPasswordResetEmail } from 'firebase/auth';
+import colors from '../../assets/colors';
 
 
 
@@ -44,7 +45,7 @@ const Settings = ({navigation}:RouterProps) => {
 
   return (
     
-    
+    <ImageBackground source={require('../../assets/ToDoMate-ResetPassword_Background.jpg')}>
     <ScrollView>
         <View style={styles.container}>
             <Image style={styles.logo} source={require('../../assets/ToDo - Mate_Logo.png')} />
@@ -87,6 +88,7 @@ const Settings = ({navigation}:RouterProps) => {
             </Text>
         </View>
     </ScrollView>
+    </ImageBackground>
     )
 
 }
@@ -121,9 +123,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         borderRadius: 10,
-        backgroundColor: 'blue',
-        borderColor: 'white',
-        borderWidth: 1,
+        backgroundColor: colors.primary,
     },
 
     text: {
