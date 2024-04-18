@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import colors from '../../assets/colors';
+import { SegmentedControl } from '../components/SegmentedControls';
 
 export interface Todo{
     title: string;
@@ -24,10 +25,14 @@ const List = ({ navigation }: RouterProps) => {
     const auth = getAuth();
     const user = auth.currentUser;
 
+    const [selectedOption, setSelectedOption] = useState('My ToDo\'s');
     
     useEffect(() => {
+      console.log('selectedOption', selectedOption);
+
         const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
-          if (user) {
+          // This fetches all TODO's from the DATABASE that are created by the current USER
+          if (selectedOption === 'My ToDo\'s') {
             const q = query(collection(FIRESTORE_DB, "todos"), where("userID", "==", user.uid));
             const unsubscribe = onSnapshot(q, (snapshot) => {
               const fetchedTodos = snapshot.docs.map(doc => ({
@@ -38,10 +43,21 @@ const List = ({ navigation }: RouterProps) => {
             });
             return () => unsubscribe(); // Unsubscribe from Firestore when the user logs out
           }
+          // This is just a TEST it currently fetches all TODO's from the DATABASE that are not created by the current USER
+          if (selectedOption === 'Shared ToDo\'s') {
+            const q = query(collection(FIRESTORE_DB, "todos"), where("userID", "!=", user.uid));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+              const fetchedTodos = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+              })) as Todo[];
+              setTodos(fetchedTodos);
+            });
+            return () => unsubscribe(); // Unsubscribe from Firestore when the user logs out
+          }
         });
-      
         return () => unsubscribeAuth(); // Cleanup auth listener when component unmounts
-      }, []);
+      }, [selectedOption]);
       
 
     const addTodo = async () => {
@@ -61,9 +77,9 @@ const List = ({ navigation }: RouterProps) => {
     
     const TodoItem = ({ item }) => {
         const [username, setUsername] = useState('');
-        const auth = getAuth();
-        const db = getFirestore(); // Ensure you've initialized Firestore correctly
+        const db = getFirestore();
       
+        // useEffect to fetch the USERNAME of the USER who created the TODO
         useEffect(() => {
           const fetchUsername = async () => {
             if (item.userID) {
@@ -104,24 +120,33 @@ const List = ({ navigation }: RouterProps) => {
           </View>
         );
       };
-    return (
 
-      <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-          <FlatList
-              style={styles.todoConatiner}
-              data={todos}
-              keyExtractor={(todo: Todo) => todo.id}
-              renderItem={({ item }) => <TodoItem item={item} />}
-          />
-          <View style={styles.form}>
-              <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
-              <Pressable style={styles.button} onPress={addTodo} disabled={todo===''}>
-                  <Text style={styles.text}>Add ToDo</Text>
-              </Pressable>
-          </View>
-      </KeyboardAvoidingView>
-    </ImageBackground>
+
+
+  return (
+
+    <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+        <View style={styles.segmentedControl}>
+          <SegmentedControl
+          options={['My ToDo\'s', 'Shared ToDo\'s']} 
+          selectedOption={selectedOption} 
+          onOptionPress={setSelectedOption}/>
+        </View>
+        <FlatList
+            style={styles.todoConatiner}
+            data={todos}
+            keyExtractor={(todo: Todo) => todo.id}
+            renderItem={({ item }) => <TodoItem item={item} />}
+        />
+        <View style={styles.form}>
+            <TextInput style={styles.input} placeholder="Add new todo" onChangeText={(text: string) => setTodo(text)} value={todo}/>
+            <Pressable style={styles.button} onPress={addTodo} disabled={todo===''}>
+                <Text style={styles.text}>Add ToDo</Text>
+            </Pressable>
+        </View>
+    </KeyboardAvoidingView>
+  </ImageBackground>
 
   )
 }
@@ -134,11 +159,15 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 20,
     },
+    segmentedControl: {
+      alignSelf: 'center',
+      marginBottom: 20,
+    },
     todoConatiner:{
       backgroundColor: colors.white,
       padding: 20,
       marginBottom:20,
-      borderRadius: 10
+      borderRadius: 20,
     },
     form: {
         flexDirection: 'row',

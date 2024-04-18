@@ -11,19 +11,28 @@ import { FIREBASE_AUTH } from './firebaseConfig';
 import Welcome from './app/screens/Welcome';
 import SignUp from './app/screens/SignUp';
 import ResetPassword from './app/screens/ResetPassword';
+import { SegmentedControl } from './app/components/SegmentedControls';
 
 const Stack = createNativeStackNavigator();
 
 const InsideStack = createNativeStackNavigator();
+
 
 interface RouterProps {
   navigation: NavigationProp<any, any>;
 }
 
 function InsideStackScreens({ navigation }: RouterProps) {
+
+
+
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen name="ToDo's" component={List} options={{ headerTitle: 'ToDo\'s', headerRight: () => (
+      <InsideStack.Screen name="ToDo's" component={List} 
+      options={{ 
+        headerTitle: 'ToDo\'s',
+        headerTitleAlign: 'center',
+        headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Ionicons name="settings" size={24} color="black" />
             </TouchableOpacity>
