@@ -1,14 +1,15 @@
-import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, TouchableOpacity, ImageBackground, KeyboardAvoidingView, Modal } from 'react-native'
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ImageBackground, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
-import { getAuth } from 'firebase/auth';
+import { User, getAuth } from 'firebase/auth';
 import colors from '../../assets/colors';
 import { SegmentedControl } from '../components/SegmentedControls';
-import Animated, { FadeIn, FadeInLeft, FadeInRight, FadeInUp, FadeOut, FadeOutLeft, FadeOutRight, FadeOutUp, LightSpeedInLeft, LightSpeedOutRight, SlideInRight, SlideOutLeft, SlideOutRight } from 'react-native-reanimated';
 import SwipeableRow from '../components/SwipeableRow';
+import AddTodoModal from '../components/modals/AddTodoModal';
+import ShareTodoModal from '../components/modals/ShareTodoModal';
 
 export interface Todo{
     title: string;
@@ -27,6 +28,9 @@ const List = ({ navigation }: RouterProps) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalShareVisible, setModalShareVisible] = useState(false);
+    const [shareUserNames, setShareUsernames] = useState('');
+    const [fetchedUsernames, setFetchedUsernames] = useState([]);
 
 
     const [selectedOption, setSelectedOption] = useState('My ToDo\'s');
@@ -88,6 +92,18 @@ const List = ({ navigation }: RouterProps) => {
             console.error("Failed to add todo:", error);
         }
     }
+
+    const updateSharedTodo = async (todoId, shareUserNames) => {
+      if (!shareUserNames.trim()) return;
+  
+      try {
+          const todoRef = doc(FIRESTORE_DB, 'todos', todoId); // Correct reference to the todo document
+          await updateDoc(todoRef, { sharedWith: shareUserNames }); // Update sharedWith field
+          console.log("Todo updated successfully with shared user names!");
+      } catch (error) {
+          console.error("Failed to update todo:", error);
+      }
+  };
     
     const TodoItem = ({ item }) => {
         const [username, setUsername] = useState('');
@@ -103,27 +119,36 @@ const List = ({ navigation }: RouterProps) => {
               if (userSnap.exists()) {
                 setUsername(userSnap.data().username);
               } else {
-                console.log("No such user document!");
+                setUsername('unkown user');
               }
             }
           };
-      
+
           fetchUsername();
         }, [item.userID]);
       
+        // Function to toggle the TODO between done and not done
         const toggleDone = async () => {
           const ref = doc(db, `todos/${item.id}`);
           await updateDoc(ref, { done: !item.done });
         };
+
+        // Function to share the TODO with another USER
+         const shareItem = async (item, names) => {
+          console.log('Share item:', item);
+          const ref = doc(db, `todos/${item.id}`);
+          await updateDoc(ref, { shareToUserNames: names });
+        };
       
-        const deleteItem = async () => {
+        // Function to delete the TODO
+        const deleteItem = async (item) => {
           const ref = doc(db, `todos/${item.id}`);
           await deleteDoc(ref);
         };
+        const names = ['John', 'Jane', 'Doe', 'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Kevin', 'Linda', 'Michael', 'Nancy', 'Oliver', 'Pamela', 'Quentin', 'Rachel', 'Steve', 'Tina', 'Ursula', 'Victor', 'Wendy', 'Xander', 'Yvonne', 'Zach'];
       
         return (
-          <SwipeableRow>
-            <Animated.View entering={LightSpeedInLeft} exiting={LightSpeedOutRight} >
+          <SwipeableRow onDelete={() => deleteItem(item)} onSwipeableLeftOpen={() => {setModalShareVisible(true); setTodo(item)}}>
               <View style={styles.todoContainer}>
                 <TouchableOpacity style={styles.todo} onPress={toggleDone}>
                   {item.done ? <Ionicons name="checkmark-circle-outline" size={24} color="green" /> : <Ionicons name="ellipse-outline" size={24} color="grey" />}
@@ -132,56 +157,14 @@ const List = ({ navigation }: RouterProps) => {
                     <Text style={styles.createdByText}>Created by {username}</Text>
                   </View>
                 </TouchableOpacity>
-                <Ionicons name="trash-outline" size={24} color="red" onPress={deleteItem} />
               </View>
-            </Animated.View>
             </SwipeableRow>
         );
       };
-
-      const renderModal = () => (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(!modalVisible)}
-        >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text style={styles.textHeading}>Add a new Todo</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Add new todo"
-                        value={todo}
-                        onChangeText={setTodo}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Add new todo"
-                        //value={todo}
-                        //onChangeText={}
-                    />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                          addTodo();
-                          setModalVisible(false);
-                        }}
-                      >
-                      <Text style={styles.text}>Add Todo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonBack} onPress={() => setModalVisible(false)}>
-                        <Text style={styles.textBack}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </Modal>
-    );
-
-    const FloatingActionButton = ({ onPress }) => (
-      <TouchableOpacity style={styles.fab} onPress={onPress}>
-          <Ionicons name="add" size={24} color="white" />
-      </TouchableOpacity>
+  const FloatingActionButton = ({ onPress }) => (
+    <TouchableOpacity style={styles.fab} onPress={onPress}>
+        <Ionicons name="add" size={24} color="white" />
+    </TouchableOpacity>
   );
 
 
@@ -189,7 +172,8 @@ const List = ({ navigation }: RouterProps) => {
 
 
     <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
-      {renderModal()}
+      <ShareTodoModal modalVisible={modalShareVisible} setModalVisible={setModalShareVisible} shareUserNames={shareUserNames} setShareUsernames={setShareUsernames} updateSharedTodo={updateSharedTodo} todo={todo} />
+      <AddTodoModal modalVisible={modalVisible} setModalVisible={setModalVisible} addTodo={addTodo} todo={todo} setTodo={setTodo} />
         {/* Overlay that appears when modal is visible */}
         {modalVisible && (
         <View style={styles.modalBackground}></View>
@@ -306,17 +290,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     fab: {
-      position: 'absolute',
-      right: 20,
-      bottom: 20,
-      width: 60,
-      height: 60,
+      position: 'absolute',  // Ensures that it doesn't depend on other components
+      right: 20,             // Distance from the right edge of the screen
+      bottom: 20,            // Distance from the bottom edge of the screen
+      width: 60,             // Width of the FAB
+      height: 60,            // Height of the FAB
       backgroundColor: colors.primary,
-      borderRadius: 10,
+      borderRadius: 20,      // Ensures the button is perfectly round
       justifyContent: 'center',
       alignItems: 'center',
-      elevation: 6, // High elevation to ensure it appears above other components on Android
-      zIndex: 10 // Higher zIndex for iOS and to ensure it's on top in all scenarios
+      shadowColor: colors.black,   // Shadow color for iOS
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.4,
+      shadowRadius: 4,
+      zIndex: 10,
+      elevation: 7,         // Elevation for Android (creates a drop shadow)
   },
   centeredView: {
       flex: 1,
@@ -345,7 +333,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: colors.modal,
-    zIndex: 5, // Ensure it's below the modal but above other content
+    zIndex: 10, // Ensure it's below the modal but above other content
 },
 
 })

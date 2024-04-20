@@ -12,6 +12,8 @@ import Welcome from './app/screens/Welcome';
 import SignUp from './app/screens/SignUp';
 import ResetPassword from './app/screens/ResetPassword';
 import { SegmentedControl } from './app/components/SegmentedControls';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -65,16 +67,18 @@ export default function App() {
     });
   }, []);
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor={"transparent"} translucent={true} barStyle='dark-content'/>
-      <Stack.Navigator initialRouteName='Welcome'>
-        {user ? (
-          <Stack.Screen name="InsideStackScreens" component={InsideStackScreens} options={{headerShown: false}} />
-        ) : (
-          <Stack.Screen name="OutsideStackScreens" component={OutsideStackScreens} options={{ headerShown: false }} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <StatusBar backgroundColor={"transparent"} translucent={true} barStyle='dark-content'/>
+        <Stack.Navigator initialRouteName='Welcome'>
+          {user ? (
+            <Stack.Screen name="InsideStackScreens" component={InsideStackScreens} options={{headerShown: false}} />
+          ) : (
+            <Stack.Screen name="OutsideStackScreens" component={OutsideStackScreens} options={{ headerShown: false }} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
     
   );
 }

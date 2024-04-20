@@ -1,15 +1,20 @@
-import React, { Component, PropsWithChildren } from 'react';
+import React, { Component } from 'react';
 import { Animated, StyleSheet, I18nManager, View } from 'react-native';
-
+import { Ionicons } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
-
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import colors from '../../assets/colors';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export default class SwipeableRow extends Component<
-  PropsWithChildren<unknown>
-> {
+type SwipeableRowProps = {
+  children: React.ReactNode;
+  onDelete: () => void;
+  onSwipeableLeftOpen?: () => void;
+};
+
+
+export default class SwipeableRow extends Component<SwipeableRowProps> {
   private renderLeftActions = (
     _progress: Animated.AnimatedInterpolation<number>,
     dragX: Animated.AnimatedInterpolation<number>
@@ -21,8 +26,9 @@ export default class SwipeableRow extends Component<
     });
     return (
       <RectButton style={styles.leftAction} onPress={this.close}>
-        {/* Change it to some icons */}
-        <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]} />
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <Ionicons style={styles.actionIcon} name="share-outline" size={24} color="white" />
+        </Animated.View>
       </RectButton>
     );
   };
@@ -36,9 +42,10 @@ export default class SwipeableRow extends Component<
       extrapolate: 'clamp',
     });
     return (
-      <RectButton style={styles.rightAction} onPress={this.close}>
-        {/* Change it to some icons */}
-        <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]} />
+      <RectButton style={styles.rightAction}>
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <Ionicons style={styles.actionIcon} name="trash-outline" size={24} color="white"/>
+        </Animated.View>
       </RectButton>
     );
   };
@@ -51,6 +58,15 @@ export default class SwipeableRow extends Component<
   private close = () => {
     this.swipeableRow?.close();
   };
+  // handles the swipe action and executes the delete or share operation
+  handleSwipeAction = (direction) => {
+    if (direction === 'right') {
+      this.props.onDelete(); // Execute the delete operation
+    } 
+    if (direction === 'left'){
+      this.props.onSwipeableLeftOpen(); // Execute the share operation
+    }
+  };
   render() {
     const { children } = this.props;
     return (
@@ -61,7 +77,9 @@ export default class SwipeableRow extends Component<
         enableTrackpadTwoFingerGesture
         rightThreshold={40}
         renderLeftActions={this.renderLeftActions}
-        renderRightActions={this.renderRightActions}>
+        renderRightActions={this.renderRightActions}
+        onSwipeableWillOpen={this.handleSwipeAction}
+        >
         {children}
       </Swipeable>
     );
@@ -71,22 +89,25 @@ export default class SwipeableRow extends Component<
 const styles = StyleSheet.create({
   leftAction: {
     flex: 1,
-    backgroundColor: '#388e3c',
+    alignSelf: 'center',
+    height: 50,
+    backgroundColor: colors.primary,
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: I18nManager.isRTL ? 'row' : 'row-reverse',
+    borderRadius: 10,  // Added border radius here
   },
   actionIcon: {
-    width: 30,
-    marginHorizontal: 10,
-    backgroundColor: 'plum',
-    height: 20,
+    marginHorizontal: 20,
   },
   rightAction: {
+    flex: 1,
+    alignSelf: 'center',
     alignItems: 'center',
     flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    backgroundColor: '#dd2c00',
-    flex: 1,
+    backgroundColor: colors.error,
     justifyContent: 'flex-end',
+    borderRadius: 10,  // Added border radius here
+    height: 50,
   },
 });
