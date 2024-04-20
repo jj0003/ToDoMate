@@ -55,10 +55,9 @@ const List = ({ navigation }: RouterProps) => {
             });
             return () => unsubscribe(); // Unsubscribe from Firestore when the user logs out
           }
-          // This is just an ALPHA Version of this fucntionality, it only fetches the TODO's that are shared with one USER
-          // Should look into how to share with multiple users => Array of User ID's
+          // This is just an ALPHA Version of this fucntionality, it only fetches the TODO's that are shared with the current USER
           if (user && selectedOption === 'Shared ToDo\'s') {
-            const q = query(collection(FIRESTORE_DB, "todos"), where("SharedUserID", "==", user.uid)); // Of type STRING, can only be shared with one USER  atm
+            const q = query(collection(FIRESTORE_DB, "todos"), where("SharedUserID", "array-contains", user.uid)); // Of type ARRAY, can be shared with multiple USER  atm
             const unsubscribe = onSnapshot(q, (snapshot) => {
               // Make a copy of the fetched data before sorting
               let fetchedTodos = snapshot.docs.map(doc => ({
