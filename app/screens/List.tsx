@@ -57,7 +57,7 @@ const List = ({ navigation }: RouterProps) => {
           }
           // This is just a TEST it currently fetches all TODO's from the DATABASE that are not created by the current USER
           if (user && selectedOption === 'Shared ToDo\'s') {
-            const q = query(collection(FIRESTORE_DB, "todos"), where("userID", "!=", user.uid));
+            const q = query(collection(FIRESTORE_DB, "todos"), where("SharedUserID", "==", user.uid));
             const unsubscribe = onSnapshot(q, (snapshot) => {
               // Make a copy of the fetched data before sorting
               let fetchedTodos = snapshot.docs.map(doc => ({
