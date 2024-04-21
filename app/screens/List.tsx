@@ -4,7 +4,7 @@ import { FIRESTORE_DB } from '../../firebaseConfig';
 import { addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
-import { User, getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import colors from '../../assets/colors';
 import { SegmentedControl } from '../components/SegmentedControls';
 import SwipeableRow from '../components/SwipeableRow';
@@ -15,6 +15,7 @@ export interface Todo{
     title: string;
     done: boolean;
     id: string;
+    sharedUserID: [];
 }
 
 interface RouterProps {
@@ -29,8 +30,6 @@ const List = ({ navigation }: RouterProps) => {
     const user = auth.currentUser;
     const [modalVisible, setModalVisible] = useState(false);
     const [modalShareVisible, setModalShareVisible] = useState(false);
-    const [shareUserNames, setShareUsernames] = useState('');
-    const [fetchedUsernames, setFetchedUsernames] = useState([]);
 
 
     const [selectedOption, setSelectedOption] = useState('My ToDo\'s');
@@ -57,7 +56,7 @@ const List = ({ navigation }: RouterProps) => {
           }
           // This is just an ALPHA Version of this fucntionality, it only fetches the TODO's that are shared with the current USER
           if (user && selectedOption === 'Shared ToDo\'s') {
-            const q = query(collection(FIRESTORE_DB, "todos"), where("SharedUserID", "array-contains", user.uid)); // Of type ARRAY, can be shared with multiple USER  atm
+            const q = query(collection(FIRESTORE_DB, "todos"), where("sharedUserID", "array-contains", user.uid)); // Of type ARRAY, can be shared with multiple USER  atm
             const unsubscribe = onSnapshot(q, (snapshot) => {
               // Make a copy of the fetched data before sorting
               let fetchedTodos = snapshot.docs.map(doc => ({
@@ -85,7 +84,8 @@ const List = ({ navigation }: RouterProps) => {
             await addDoc(collection(FIRESTORE_DB, 'todos'), {
                 title: todo,
                 done: false,
-                userID: user?.uid
+                userID: user?.uid,
+                sharedUserID: []
             }); 
             setTodo('');
         } catch (error) {
@@ -145,7 +145,6 @@ const List = ({ navigation }: RouterProps) => {
           const ref = doc(db, `todos/${item.id}`);
           await deleteDoc(ref);
         };
-        const names = ['John', 'Jane', 'Doe', 'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Kevin', 'Linda', 'Michael', 'Nancy', 'Oliver', 'Pamela', 'Quentin', 'Rachel', 'Steve', 'Tina', 'Ursula', 'Victor', 'Wendy', 'Xander', 'Yvonne', 'Zach'];
       
         return (
           <SwipeableRow onDelete={() => deleteItem(item)} onSwipeableLeftOpen={() => {setModalShareVisible(true); setTodo(item)}}>
@@ -172,8 +171,8 @@ const List = ({ navigation }: RouterProps) => {
 
 
     <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
-      <ShareTodoModal modalVisible={modalShareVisible} setModalVisible={setModalShareVisible} shareUserNames={shareUserNames} setShareUsernames={setShareUsernames} updateSharedTodo={updateSharedTodo} todo={todo} />
-      <AddTodoModal modalVisible={modalVisible} setModalVisible={setModalVisible} addTodo={addTodo} todo={todo} setTodo={setTodo} />
+      <ShareTodoModal modalVisible={modalShareVisible} setModalVisible={setModalShareVisible} todo={todo} setTodo={setTodo}/>
+      <AddTodoModal modalVisible={modalVisible} setModalVisible={setModalVisible} todo={todo} setTodo={setTodo} />
         {/* Overlay that appears when modal is visible */}
         {modalVisible && (
         <View style={styles.modalBackground}></View>

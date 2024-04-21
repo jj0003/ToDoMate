@@ -1,9 +1,61 @@
 // ShareTodoModal.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import colors from '../../../assets/colors';
+import { getFirestore, collection, query, where, getDocs, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
-const ShareTodoModal = ({ modalVisible, setModalVisible, shareUserNames, setShareUsernames, updateSharedTodo, todo }) => {
+//ATM this is only capable to add one user to the sharedUserID array => need to add a way to add multiple users for ALPHA 2.0
+const ShareTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
+
+    const [inputUserName, setInputUserName] = useState(''); // State to store the input username
+
+    // Function to fetch user ID from username
+    const fetchUserIdFromUsername = async (username) => {
+        const db = getFirestore(); // Get Firestore instance
+        const usersCollection = collection(db, 'users'); // Reference to the 'users' collection
+        const userQuery = query(usersCollection, where("username", "==", username)); // Query to find the user by username
+
+        try {
+            const querySnapshot = await getDocs(userQuery);
+            if (querySnapshot.empty) {
+                console.log("No user found with the username:", username);
+                return null; // No user found
+            } else {
+                // Assuming username is unique and only one document will be returned
+                const userDoc = querySnapshot.docs[0];
+                console.log("User ID:", userDoc.id); // Log the user ID
+                return userDoc.id; // Return the user ID
+            }
+        } catch (error) {
+            console.error("Error fetching user ID:", error);
+            return null; // Return null in case of error
+        }
+    };
+
+    
+    // Handle user search button press
+    const handleSearch = async () => {
+        const fetchedUserId = await fetchUserIdFromUsername(inputUserName);
+        console.log("Fetched user ID:", fetchedUserId)
+        return fetchedUserId;
+    };
+
+    const addUserIDToTodo = async (todoId) => {
+        const userId = await handleSearch();
+        console.log("Adding user ID to todo:", userId);
+        const db = getFirestore(); // Initialize Firestore, make sure it's properly configured
+        const todoRef = doc(db, 'todos', todoId); // Reference to the todo document
+    
+        try {
+            await updateDoc(todoRef, {
+                sharedUserID: arrayUnion(userId) // Adds the userId to the sharedUserID array
+            });
+            console.log("User ID added to todo successfully", userId);
+        } catch (error) {
+            console.error("Error updating todo with userID:", error);
+        }
+    };
+
     return (
         <Modal
             animationType="slide"
@@ -17,15 +69,16 @@ const ShareTodoModal = ({ modalVisible, setModalVisible, shareUserNames, setShar
                     <TextInput
                         style={styles.input}
                         placeholder="Add users to share with"
-                        value={shareUserNames}
-                        onChangeText={setShareUsernames}
+                        value={inputUserName}
+                        onChangeText={setInputUserName}
                     />
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            updateSharedTodo(todo.id, shareUserNames);
+                            addUserIDToTodo(todo.id); // Add the user ID to the todo
                             setModalVisible(false);
-                            setShareUsernames('');
+                            setTodo('');
+                            setInputUserName('');
                         }}
                     >
                         <Text style={styles.text}>Share Todo</Text>
@@ -34,7 +87,8 @@ const ShareTodoModal = ({ modalVisible, setModalVisible, shareUserNames, setShar
                         style={styles.buttonBack}
                         onPress={() => {
                             setModalVisible(false);
-                            setShareUsernames('');
+                            setTodo('');
+                            setInputUserName('');
                         }}
                     >
                         <Text style={styles.textBack}>Cancel</Text>
