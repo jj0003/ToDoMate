@@ -8,7 +8,6 @@ import { FIRESTORE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
 const AddTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
   
   const [inputUserName, setInputUserName] = useState(''); // State to store the input username
-  const [newTodoID, setNewTodoID] = useState(''); // State to store the new todo
   const user = FIREBASE_AUTH.currentUser;
 
 
