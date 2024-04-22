@@ -76,34 +76,6 @@ const List = ({ navigation }: RouterProps) => {
         return () => unsubscribeAuth(); // Cleanup auth listener when component unmounts
       }, [selectedOption]);
       
-
-    const addTodo = async () => {
-        if (!todo.trim()) return;
-    
-        try {
-            await addDoc(collection(FIRESTORE_DB, 'todos'), {
-                title: todo,
-                done: false,
-                userID: user?.uid,
-                sharedUserID: []
-            }); 
-            setTodo('');
-        } catch (error) {
-            console.error("Failed to add todo:", error);
-        }
-    }
-
-    const updateSharedTodo = async (todoId, shareUserNames) => {
-      if (!shareUserNames.trim()) return;
-  
-      try {
-          const todoRef = doc(FIRESTORE_DB, 'todos', todoId); // Correct reference to the todo document
-          await updateDoc(todoRef, { sharedWith: shareUserNames }); // Update sharedWith field
-          console.log("Todo updated successfully with shared user names!");
-      } catch (error) {
-          console.error("Failed to update todo:", error);
-      }
-  };
     
     const TodoItem = ({ item }) => {
         const [username, setUsername] = useState('');
@@ -131,13 +103,6 @@ const List = ({ navigation }: RouterProps) => {
         const toggleDone = async () => {
           const ref = doc(db, `todos/${item.id}`);
           await updateDoc(ref, { done: !item.done });
-        };
-
-        // Function to share the TODO with another USER
-         const shareItem = async (item, names) => {
-          console.log('Share item:', item);
-          const ref = doc(db, `todos/${item.id}`);
-          await updateDoc(ref, { shareToUserNames: names });
         };
       
         // Function to delete the TODO
