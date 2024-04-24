@@ -6,6 +6,8 @@
 
 ## Introduction
 
+New features coming soon!
+
 [Visit ToDoMate](https://budget-mate.org/todomate.html)
 
 **ToDoMate** is your dynamic, user-friendly to-do list application designed to simplify your daily task management. Developed with React Native and enhanced with Expo, it offers a seamless cross-platform experience, specifically optimized for Android devices. Leveraging the power of Firebase for robust backend services and secure user authentication, ToDoMate ensures your task management process is both secure and reliable. Aimed at productivity and simplicity, ToDoMate stands as your efficient solution for organizing daily tasks.
