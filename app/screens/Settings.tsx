@@ -225,10 +225,9 @@ const Settings = ({navigation}:RouterProps) => {
                 </View>
             </View>
             <View>
-                <Text style={styles.h2}>Privacy Settings</Text>
-                <Text style={styles.p}>Change your name here:</Text>
+                <Text style={styles.h2}>Notification Settings</Text>
                 <View style={styles.row}>
-                    <TextInput style={styles.input} placeholder="Name" autoCapitalize='none' onChangeText={(name: string) => setName(name)} value={name} />
+                    <Text style={styles.p}>Let other users share their ToDo's with you.</Text>
                     <Switch style={styles.switch} 
                     trackColor={{false: colors.background, true: colors.primary}} 
                     thumbColor={enabled ? colors.white : colors.white}
@@ -236,37 +235,53 @@ const Settings = ({navigation}:RouterProps) => {
                     value={enabled}
                     />
                 </View>
-                <Text style={styles.p}>Change your username here:</Text>
                 <View style={styles.row}>
-                    <TextInput style={styles.input} placeholder="Username" autoCapitalize='none' onChangeText={(username: string) => setUsername(username)} value={username} />
-                    {loadingUser ? <ActivityIndicator style={styles.loadingButton} size='large' color='blue' /> : (
-                        <>
-                            <TouchableOpacity style={[styles.button, styles.marginBottom10]} onPress={editUserName}>
-                                <Text style={styles.text}>Update</Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
+                    <Text style={styles.p}>Get notified when another User shares a ToDo with you.</Text>
+                    <Switch style={styles.switch} 
+                    trackColor={{false: colors.background, true: colors.primary}} 
+                    thumbColor={enabled ? colors.white : colors.white}
+                    onValueChange={(value) => setEnabled(value)}
+                    value={enabled}
+                    />
                 </View>
-                <Text style={styles.p}>Change your email address here:</Text>
                 <View style={styles.row}>
-                    <TextInput style={styles.input} placeholder="Email" autoCapitalize='none' onChangeText={(email: string) => setEmail(email)} value={email} />
-                    {loadingEmail ? <ActivityIndicator style={styles.loadingButton} size='large' color='blue' /> : (
-                        <>
-                            <TouchableOpacity style={[styles.button, styles.marginBottom10]} onPress={editUserEmail}>
-                                <Text style={styles.text}>Update</Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
+                    <Text style={styles.p}>Get notified when a shared ToDo is marked as completed by another user.</Text>
+                    <Switch style={styles.switch} 
+                    trackColor={{false: colors.background, true: colors.primary}} 
+                    thumbColor={enabled ? colors.white : colors.white}
+                    onValueChange={(value) => setEnabled(value)}
+                    value={enabled}
+                    />
                 </View>
-                <Text style={styles.p}>Reset your password here:</Text>
-                <View>
-                    {loadingPassword ? <ActivityIndicator size='large' color='blue' /> : (
-                    <>
-                        <TouchableOpacity style={styles.button} onPress={resetPassword}>
-                            <Text style={styles.text}>Reset Your Password</Text>
-                        </TouchableOpacity>
-                    </>
-                    )}
+            </View>
+            <View>
+                <Text style={styles.h2}>Privacy Settings</Text>
+                <View style={styles.row}>
+                    <Text style={styles.p}>Do not send data and analytics to improve the service.</Text>
+                    <Switch style={styles.switch} 
+                    trackColor={{false: colors.background, true: colors.primary}} 
+                    thumbColor={enabled ? colors.white : colors.white}
+                    onValueChange={(value) => setEnabled(value)}
+                    value={enabled}
+                    />
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.p}>Send bug reports and crashlitics to improve the service.</Text>
+                    <Switch style={styles.switch} 
+                    trackColor={{false: colors.background, true: colors.primary}} 
+                    thumbColor={enabled ? colors.white : colors.white}
+                    onValueChange={(value) => setEnabled(value)}
+                    value={enabled}
+                    />
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.p}>Demo mode.</Text>
+                    <Switch style={styles.switch} 
+                    trackColor={{false: colors.background, true: colors.primary}} 
+                    thumbColor={enabled ? colors.white : colors.white}
+                    onValueChange={(value) => setEnabled(value)}
+                    value={enabled}
+                    />
                 </View>
             </View>
             <View>
@@ -335,6 +350,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     p: {
+        flex: 4,
         fontSize: 16,
         marginBottom: 10,
     },
@@ -354,6 +370,8 @@ const styles = StyleSheet.create({
         flex: 1.2,
     },
     switch:{
-        flex: 0.5,
+        flex: 1,
+        marginRight: 10,
+        transform: [{ scaleX: 1.25 }, { scaleY: 1.25 }],
     }
 })

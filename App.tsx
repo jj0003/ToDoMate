@@ -1,7 +1,7 @@
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import List from './app/screens/List';    
 import Login from './app/screens/Login'; 
 import Details from './app/screens/Settings';
@@ -27,7 +27,13 @@ interface RouterProps {
 function InsideStackScreens({ navigation }: RouterProps) {
 
 
-
+  const signOut = async () => {
+    try {
+        await FIREBASE_AUTH.signOut();
+    } catch (error: any) {
+        alert("Error signing out: " + error.message);
+    }
+}
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="ToDo's" component={List} 
@@ -41,7 +47,14 @@ function InsideStackScreens({ navigation }: RouterProps) {
           ),
         }}
       />
-      <InsideStack.Screen name="Settings" component={Details} options={{ headerShown: true, headerBackTitle: 'Back' }} />
+      <InsideStack.Screen name="Settings" component={Details} options={{ headerShown: true, headerBackTitle: 'Back', 
+        headerRight: () => (
+          <TouchableOpacity onPress={signOut} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}>
+            <Text style={{ color: 'red', marginRight: 10 }}>Log Out</Text>
+            <Ionicons name="log-out-outline" size={24} color="red" />
+          </TouchableOpacity>
+        ),
+       }} />
     </InsideStack.Navigator>
   );
 }
