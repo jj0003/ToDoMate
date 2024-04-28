@@ -4,7 +4,11 @@
 
 # ToDoMate
 
+
+
 ## Introduction
+
+New features coming soon!
 
 [Visit ToDoMate](https://budget-mate.org/todomate.html)
 
