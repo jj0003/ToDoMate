@@ -1,11 +1,9 @@
-import { View, Text, Image, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView,TouchableOpacity, ScrollView, SafeAreaView, ImageBackground  } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ActivityIndicator, KeyboardAvoidingView,TouchableOpacity, ImageBackground  } from 'react-native'
 import React, {  useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
 import colors from '../../assets/colors';
 
 
@@ -21,7 +19,6 @@ const SignUp = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [image, setImage] = useState(null);
 
 
     
@@ -32,8 +29,6 @@ const SignUp = ({navigation}: RouterProps) => {
             const user = userCredential.user;
             console.log(userCredential);
             let imageUrl = '';
-        if (image) {
-        }
             await setDoc(doc(FIRESTORE_DB, "users", user.uid), {
                 name : name,
                 username: username,
@@ -49,21 +44,6 @@ const SignUp = ({navigation}: RouterProps) => {
         }   
     }
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-    
-        console.log(result);
-    
-        if (!result.canceled) {
-          setImage(result.assets[0].uri);
-        }
-      };
-
   return (
         <ImageBackground source={require('../../assets/ToDoMate-SignUp_Background.jpg')}>
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -77,25 +57,6 @@ const SignUp = ({navigation}: RouterProps) => {
                         )
                     }
                     </Text>
-                    {
-                        image ? (
-                            <View style={styles.nameAndUserNameContainer}>
-                                <TouchableOpacity onPress={pickImage} style={styles.imagePressable}>
-                                    <Image source={{ uri: image }} style={styles.uploadImage}/>
-                                </TouchableOpacity>
-                                <Text>Edit Your Profile Picture</Text>
-                            </View>
-                        ) : (
-                            <>
-                                <View style={styles.nameAndUserNameContainer}>
-                                    <TouchableOpacity onPress={pickImage} style={styles.uploadContainer}>
-                                        <Ionicons name="cloud-upload-outline" size={40} onPress={pickImage} style={styles.uploadIcon} />
-                                    </TouchableOpacity>
-                                    <Text style={styles.text}>Upload Your Profile Picture</Text>
-                                </View>
-                            </> 
-                        )
-                    }
                     <View style={styles.nameAndUserNameContainer}>
                         <TextInput style={styles.userNameInput} placeholder="Name*" autoCapitalize='none' onChangeText={( inputName: string) => setName(inputName)} value={name}/>
                         <TextInput style={styles.userNameInput} placeholder="Username*" autoCapitalize='none' onChangeText={(inputUsername: string) => setUsername(inputUsername)} value={username}/>
@@ -244,16 +205,4 @@ const styles = StyleSheet.create({
         borderRadius: 9999, 
         color: colors.primary,
     },
-    uploadImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 9999, 
-        color: colors.primary,
-    },
-    imagePressable: {
-        width: 50,
-        height: 50,
-        borderRadius: 9999,
-    },
-
 })

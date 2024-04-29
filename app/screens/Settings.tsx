@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView ,StyleSheet, Pressable, TextInput, ActivityIndicator, KeyboardAvoidingView, Linking, ImageBackground, TouchableOpacity, ToastAndroid, Alert } from 'react-native'
+import { View, Text, ScrollView ,StyleSheet, TextInput, ActivityIndicator, Linking, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../../firebaseConfig';
@@ -6,7 +6,6 @@ import { sendPasswordResetEmail } from 'firebase/auth';
 import colors from '../../assets/colors';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Switch } from 'react-native-gesture-handler';
-import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
 
 
 interface RouterProps {

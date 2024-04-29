@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ActivityIndicator, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
@@ -15,14 +15,7 @@ const Login = ({navigation}: RouterProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [emailValid, setEmailValid] = useState(true);
 
-    const validateEmail = (inputEmail: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isValid = emailRegex.test(inputEmail);
-        setEmailValid(isValid);
-        setEmail(inputEmail); 
-    };
 
     const signIn = async () => {
         setLoading(true);
@@ -58,7 +51,7 @@ const Login = ({navigation}: RouterProps) => {
                 (
                     <>
                         {
-                            email === '' ||  password.length < 5  ? (
+                            email === '' ||  password.length < 6  ? (
                                 <TouchableOpacity style={styles.buttonLogInDisabled} disabled={true}>
                                     <Text style={styles.text}>Log In</Text>
                                 </TouchableOpacity> 
