@@ -1,6 +1,6 @@
 // ShareTodoModal.js
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import colors from '../../../assets/colors';
 import { getFirestore, collection, query, where, getDocs, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
@@ -8,9 +8,11 @@ import { getFirestore, collection, query, where, getDocs, arrayUnion, doc, updat
 const ShareTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
 
     const [inputUserName, setInputUserName] = useState(''); // State to store the input username
+    const [loadingShareUser, setLoadingShareUser] = useState(false); // State to track loading state of addTodo
 
     // Function to fetch user ID from username
     const fetchUserIdFromUsername = async (username) => {
+
         const db = getFirestore(); // Get Firestore instance
         const usersCollection = collection(db, 'users'); // Reference to the 'users' collection
         const userQuery = query(usersCollection, where("username", "==", username)); // Query to find the user by username
@@ -43,7 +45,7 @@ const ShareTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
     const addUserIDToTodo = async (todoId) => {
         const userId = await handleSearch();
         console.log("Adding user ID to todo:", userId);
-        const db = getFirestore(); // Initialize Firestore, make sure it's properly configured
+        const db = getFirestore();
         const todoRef = doc(db, 'todos', todoId); // Reference to the todo document
     
         try {
@@ -51,48 +53,58 @@ const ShareTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
                 sharedUserID: arrayUnion(userId) // Adds the userId to the sharedUserID array
             });
             console.log("User ID added to todo successfully", userId);
+
         } catch (error) {
             console.error("Error updating todo with userID:", error);
         }
     };
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-        >
+        <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.textHeading}>Share this Todo</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Add users to share with"
-                        value={inputUserName}
-                        onChangeText={setInputUserName}
-                    />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            addUserIDToTodo(todo.id); // Add the user ID to the todo
-                            setModalVisible(false);
-                            setTodo('');
-                            setInputUserName('');
-                        }}
-                    >
-                        <Text style={styles.text}>Share Todo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.buttonBack}
-                        onPress={() => {
-                            setModalVisible(false);
-                            setTodo('');
-                            setInputUserName('');
-                        }}
-                    >
-                        <Text style={styles.textBack}>Cancel</Text>
-                    </TouchableOpacity>
+                {loadingShareUser ? 
+                    <>
+                        <ActivityIndicator size='large' color={colors.primary} />
+                        <Text style={styles.textLoading} >Sharing todo....</Text>
+                    </>
+                    : (
+                        <>
+                            <Text style={styles.textHeading}>Share this Todo</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Add users to share with"
+                                value={inputUserName}
+                                onChangeText={setInputUserName}
+                            />
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={async () => {
+                                    if (inputUserName != null){
+                                        setLoadingShareUser(true);
+                                        await addUserIDToTodo(todo.id);
+                                    }
+                                    setModalVisible(false);
+                                    setTodo('');
+                                    setInputUserName('');
+                                    setLoadingShareUser(false);
+                                }}
+                            >
+                                <Text style={styles.text}>Share Todo</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonBack}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                    setTodo('');
+                                    setInputUserName('');
+                                }}
+                            >
+                                <Text style={styles.textBack}>Cancel</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
+                    
                 </View>
             </View>
         </Modal>
@@ -104,16 +116,6 @@ const styles = StyleSheet.create({
       height: '100%',
       width: '100%',
       padding: 20,
-    },
-    segmentedControl: {
-      alignSelf: 'center',
-      marginBottom: 20,
-    },
-    todoConatiner:{
-      backgroundColor: colors.white,
-      padding: 20,
-      marginBottom:20,
-      borderRadius: 20,
     },
     form: {
       flexDirection: 'row',
@@ -151,6 +153,10 @@ const styles = StyleSheet.create({
     text: {
         color: colors.white,
         fontWeight: 'bold',
+    },
+    textLoading: {
+        color: colors.black,
+        textAlign: 'center',
     },
     textBack: {
       color: colors.primary,

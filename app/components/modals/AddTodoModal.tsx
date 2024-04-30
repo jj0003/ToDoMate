@@ -1,6 +1,6 @@
 // AddTodoModal.js
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import colors from '../../../assets/colors';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc, arrayUnion, addDoc } from 'firebase/firestore';
 import { FIRESTORE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
@@ -8,11 +8,14 @@ import { FIRESTORE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
 const AddTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
   
   const [inputUserName, setInputUserName] = useState(''); // State to store the input username
+  const [loadingAddTodo, setLoadingAddTodo] = useState(false); // State to track loading state of addTodo
+
   const user = FIREBASE_AUTH.currentUser;
 
 
 
   const addTodo = async () => {
+    setLoadingAddTodo(true); // Set loading state to true
     if (!todo.trim()) return;
 
     try {
@@ -22,11 +25,11 @@ const AddTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
             userID: user?.uid,
             sharedUserID: []
         }); 
-        setTodo('');
         return docRef.id; // Return the ID of the new todo
     } catch (error) {
         console.error("Failed to add todo:", error);
     }
+
 }
     // Function to fetch user ID from username
     const fetchUserIdFromUsername = async (username) => {
@@ -76,50 +79,56 @@ const AddTodoModal = ({ modalVisible, setModalVisible, todo, setTodo }) => {
     };
 
   return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-        >
+        <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.textHeading}>Add a new Todo</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="New todo"
-                        value={todo}
-                        onChangeText={setTodo}
-                    />
-                    <Text style={styles.textHeading}>Share this Todo with your friends</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Add users to share with"
-                        value={inputUserName}
-                        onChangeText={setInputUserName}
-                    />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={async () => {
-                          const newTodoID = await addTodo(); // Wait for addTodo to finish and get the new todo ID
-                          if (newTodoID != null) { // If a new todo was added
-                            await addUserIDToTodo(newTodoID); // Add the user ID to the new todo
-                          }
-                          setModalVisible(false);
-                          setInputUserName('');
-                        }}
-                    >
-                      <Text style={styles.text}>Add Todo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.buttonBack}
-                        onPress={() => {
-                          setModalVisible(false);
-                          setTodo('');
-                        }}
-                    >
-                        <Text style={styles.textBack}>Cancel</Text>
-                    </TouchableOpacity>
+                    
+                    {loadingAddTodo ? 
+                    <>
+                        <ActivityIndicator size='large' color={colors.primary} />
+                        <Text style={styles.textLoading} >Adding todo....</Text>
+                    </>
+                    : (
+                        <>
+                            <Text style={styles.textHeading}>Add a new Todo</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="New todo"
+                                value={todo}
+                                onChangeText={setTodo}
+                            />
+                            <Text style={styles.textHeading}>Share this Todo with your friends</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Add users to share with"
+                                value={inputUserName}
+                                onChangeText={setInputUserName}
+                            />
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={async () => {
+                                const newTodoID = await addTodo(); // Wait for addTodo to finish and get the new todo ID
+                                if (newTodoID != null) { // If a new todo was added
+                                    await addUserIDToTodo(newTodoID); // Add the user ID to the new todo
+                                }
+                                setModalVisible(false);
+                                setInputUserName('');
+                                setTodo('');
+                                setLoadingAddTodo(false); // Set loading state to false
+                            }}>
+                                <Text style={styles.text}>Add Todo</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonBack}
+                                onPress={() => {
+                                setModalVisible(false);
+                                setTodo('');
+                                }}
+                            >
+                                <Text style={styles.textBack}>Cancel</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
                 </View>
             </View>
         </Modal>
@@ -178,6 +187,10 @@ const styles = StyleSheet.create({
     text: {
         color: colors.white,
         fontWeight: 'bold',
+    },
+    textLoading: {
+        color: colors.black,
+        textAlign: 'center',
     },
     textBack: {
       color: colors.primary,

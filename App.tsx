@@ -11,8 +11,9 @@ import { FIREBASE_AUTH } from './firebaseConfig';
 import Welcome from './app/screens/Welcome';
 import SignUp from './app/screens/SignUp';
 import ResetPassword from './app/screens/ResetPassword';
-import { SegmentedControl } from './app/components/SegmentedControls';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SplashScreen from './app/screens/SplashScreen';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -72,13 +73,21 @@ function OutsideStackScreens({ navigation }: RouterProps) {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user', user);
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      setLoading(false);
     });
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
+
+  if (loading) {
+    return <SplashScreen/>;
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>

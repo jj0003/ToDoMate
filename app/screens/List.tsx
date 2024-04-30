@@ -139,7 +139,7 @@ const List = ({ navigation }: RouterProps) => {
       <ShareTodoModal modalVisible={modalShareVisible} setModalVisible={setModalShareVisible} todo={todo} setTodo={setTodo}/>
       <AddTodoModal modalVisible={modalVisible} setModalVisible={setModalVisible} todo={todo} setTodo={setTodo} />
         {/* Overlay that appears when modal is visible */}
-        {modalVisible && (
+        {(modalVisible || modalShareVisible) && (
         <View style={styles.modalBackground}></View>
         )}
         <FloatingActionButton onPress={() => setModalVisible(true)}/>
