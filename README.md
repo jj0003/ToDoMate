@@ -8,7 +8,7 @@
 
 ## Introduction
 
-New features coming soon!
+TODO MATE v0.1.0 IS NOW LIVE!
 
 [Visit ToDoMate](https://budget-mate.org/todomate.html)
 
