@@ -8,6 +8,7 @@
 
 ## Introduction
 
+
 TODO MATE v0.1.0 IS NOW LIVE!
 
 [Visit ToDoMate](https://budget-mate.org/todomate.html)
@@ -21,13 +22,17 @@ TODO MATE v0.1.0 IS NOW LIVE!
 - **Minimalist Design**: The ToDoMate UI is minimalist and designed with clarity and usability in mind, offering a distraction-free environment for your task management.
 
 <p float="left">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Check%20Your%20Emails%20Screen%20Light.jpg?raw=true" width="100" alt="Check Your Emails Screen">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Log%20In%20Screen%20Light.jpg?raw=true" width="100" alt="Log In Screen">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Reset%20Your%20Password%20Screen%20Light.jpg?raw=true" width="100" alt="Reset Your Password Screen">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Settings%20Screen%20Light.jpg?raw=true" width="100" alt="Settings Screen">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Sign%20Up%20Screen%20Light.jpg?raw=true" width="100" alt="Sign Up Screen">
-  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDos%20Screen%20Light.jpg?raw=true" width="100" alt="ToDos Screen">
   <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Welcome%20Screen%20Light.jpg?raw=true" width="100" alt="Welcome Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Sign%20Up%20Screen%20Light.jpg?raw=true" width="100" alt="Sign Up Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Log%20In%20Screen%20Light.jpg?raw=true" width="100" alt="Log In Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Check%20Your%20Emails%20Screen%20Light.jpg?raw=true" width="100" alt="Reset Your Password Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Check%20Your%20Emails%20Screen%20Light.jpg?raw=true" width="100" alt="Check Your Emails Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDo%20List%20Screen%20Light.png?raw=true" width="100" alt="ToDos Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDo%20List%20DELETE%20Screen%20Light.png?raw=true" width="100" alt="ToDos DELETE Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDo%20List%20SHARE%20Screen%20Light.png?raw=true" width="100" alt="ToDos SHARE Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDo%20List%20POP%20UP%201%20Screen%20Light.png?raw=true" width="100" alt="ToDos POP UP 1 Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20ToDo%20List%20POP%20UP%202%20Screen%20Light.png?raw=true" width="100" alt="ToDos POP UP 2 Screen">
+  <img src="https://github.com/jj0003/ToDoMate/blob/master/screenshots/ToDoMate%20Settings%20Screen%20Light.png?raw=true" width="100" alt="Settings Screen">
 </p>
 
 
