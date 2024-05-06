@@ -135,7 +135,7 @@ const List = ({ navigation }: RouterProps) => {
   return (
 
 
-    <ImageBackground source={require('../../assets/ToDoMate-List_Background.jpg')}>
+    <View>
       <ShareTodoModal modalVisible={modalShareVisible} setModalVisible={setModalShareVisible} todo={todo} setTodo={setTodo}/>
       <AddTodoModal modalVisible={modalVisible} setModalVisible={setModalVisible} todo={todo} setTodo={setTodo} />
         {/* Overlay that appears when modal is visible */}
@@ -159,7 +159,7 @@ const List = ({ navigation }: RouterProps) => {
               renderItem={({ item }) => <TodoItem item={item} />}
           />
       </View>
-  </ImageBackground>
+  </View>
 
   )
 }
@@ -197,38 +197,6 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       backgroundColor: colors.background,
     },
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: colors.primary,
-        marginBottom: 10,
-    },
-    buttonBack: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 10,
-      height: 50,
-      borderRadius: 10,
-      backgroundColor: colors.background,
-      marginBottom: 10,
-  },
-    text: {
-        color: colors.white,
-        fontWeight: 'bold',
-    },
-    textBack: {
-      color: colors.primary,
-      fontWeight: 'bold',
-  },
-  textHeading: {
-    color: colors.black,
-    fontWeight: 'bold',
-    fontSize: 25,
-    marginBottom: 10,
-  },
     todoContainer:{
         flexDirection: 'row',
         backgroundColor: colors.background,
@@ -238,7 +206,6 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 10,
         borderRadius: 10,
-
     },
     todoText:{
         paddingHorizontal: 5,
@@ -268,7 +235,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.4,
       shadowRadius: 4,
       zIndex: 10,
-      elevation: 7,         // Elevation for Android (creates a drop shadow)
+      elevation: 7,
   },
   centeredView: {
       flex: 1,

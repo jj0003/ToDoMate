@@ -18,12 +18,13 @@ const Welcome = ({navigation}:RouterProps) => {
 
   return (
     
-    <ImageBackground source={require('../../assets/ToDoMate-Welcome_Background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('../../assets/OutsideStack-ToDoMate.webp')} style={styles.backgroundImage}>
         <View style={styles.container}>
             
             <View style={styles.topContainer}>
                 <Image style={styles.logoImage} source={require('../../assets/ToDo - Mate_Logo.png')} />
                 <Text style={styles.textHeading}>ToDoMate</Text>
+                <Text style={styles.textSubtitle}>WE ENGINEER PRODUCTIVITY.</Text>
             </View>
             
             <View style={styles.bottomContainer}>
@@ -105,6 +106,12 @@ const styles = StyleSheet.create({
     textHeading: {
         fontSize: 30,
         fontWeight: 'bold',
+
+    },
+    textSubtitle: {
+        fontSize: 18,
+        fontWeight: 'normal',
+        letterSpacing: 3.5,
     },
     backgroundImage: {
         flex: 1,

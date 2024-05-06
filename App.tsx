@@ -1,7 +1,7 @@
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { Text, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StatusBar, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import List from './app/screens/List';    
 import Login from './app/screens/Login'; 
 import Details from './app/screens/Settings';

@@ -45,7 +45,7 @@ const SignUp = ({navigation}: RouterProps) => {
     }
 
   return (
-        <ImageBackground source={require('../../assets/ToDoMate-SignUp_Background.jpg')}>
+        <ImageBackground source={require('../../assets/OutsideStack-ToDoMate.webp')}>
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <View style={styles.mainContainer}>
                 <Text style={styles.textHeading}>Let's get ya goin', 

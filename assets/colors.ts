@@ -19,7 +19,7 @@ interface Colors {
 }
 
 const colors: Colors = {
-    primary: '#3c62c6',
+    primary: '#0F172A',
     secondary: '#d66b43',
     tiertary: '#1b243b',
     fourtary: '#ead0d0',

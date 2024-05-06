@@ -31,7 +31,7 @@ const ResetPassword = ({navigation}: RouterProps) => {
         }
     }
   return (
-        <ImageBackground source={require('../../assets/ToDoMate-ResetPassword_Background.jpg')}>
+        <ImageBackground source={require('../../assets/OutsideStack-ToDoMate.webp')}>
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <View style={styles.topContainer}>
                 {!emailSent ? (
